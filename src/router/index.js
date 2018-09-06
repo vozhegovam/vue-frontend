@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Users from '@/components/Users'
 import Companies from '@/components/Companies'
 import ListTemplates from '@/components/ListTemplates'
+import PointTemplates from '@/components/PointTemplates'
 
 Vue.use(Router)
 
@@ -22,11 +23,12 @@ export default new Router({
       path: '/templates',
       name: 'ListTemplates',
       component: ListTemplates
-      // children{
-      //   path: '/point_templates',
-      //   name: 'PointTemplates',
-      //   component: PointTemplates,
-      // }
+    },
+    {
+      path: '/template/:id',
+      props: true,
+      name: 'PointTemplates',
+      component: PointTemplates
     }
   ],
   mode: 'history'
