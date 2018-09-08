@@ -5,8 +5,7 @@
         <v-list three-line>
           <template v-for="item in pointTemplatesByParentId">
             <v-list-tile
-              :key="item.name"
-              :to="'/template/' + item.id"
+              :key="item.id"
               @click=""
             >
               <v-list-tile-content>
@@ -28,7 +27,10 @@
     computed: {
       pointTemplatesByParentId () {
         const id = this.id
-        return this.$store.getters.pointTemplatesByParentId(id)
+        return this.$store.getters.pointByParentId(id)
+      },
+      pointTemplates () {
+        return this.$store.getters.getPointTemplates.filter(pointTemplate => (pointTemplate.parentId === this.id))
       }
     }
   }

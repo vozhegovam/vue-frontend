@@ -1,14 +1,14 @@
-class ListTemplate {
-  constructor (name , description, id = null) {
-    this.id = id
-    this.name = name
-    this.description = description
-  }
-}
+// class PointTemplate {
+//   constructor (name , description, id = null) {
+//     this.id = id
+//     this.name = name
+//     this.description = description
+//   }
+// }
 
 export default {
   state: {
-    pointTemplates : [
+    pointTemplates: [
       {
         'id': 21679,
         'parentId': 1112,
@@ -342,8 +342,12 @@ export default {
   mutations: {},
   actions: {},
   getters: {
-    pointTemplatesByParentId (state, parentId) {
-      return state.pointTemplates.filter( pointTemplate => {return pointTemplate.parentId === parentId})
+    pointByParentId (state) {
+      return adId => {
+        return state.pointTemplates.filter(ad => {
+          return ad.parentId.toString() === adId.toString()
+        })
+      }
     }
   }
 }
