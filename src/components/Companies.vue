@@ -16,7 +16,7 @@
                 <v-text-field v-model="editedItem.description" label="Описание"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.owner" label="Владелец"></v-text-field>
+                <v-text-field v-model="editedItem.owner" label="Пользователь"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.check" label="Преверка пройдена"></v-text-field>
@@ -26,8 +26,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="save">Сохранить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -74,16 +74,16 @@
       editedItem: {
         id: '',
         name: '',
-        description: 0,
-        owner: 0,
-        check: 0
+        description: '',
+        owner: '',
+        check: ''
       },
       defaultItem: {
         id: '',
         name: '',
-        description: 0,
-        owner: 0,
-        check: 0
+        description: '',
+        owner: '',
+        check: 'Не пройдена'
       }
     }),
 
