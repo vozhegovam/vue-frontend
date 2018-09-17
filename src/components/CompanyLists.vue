@@ -63,7 +63,7 @@
                 </td>
               </template>
             </v-data-table>
-
+            <v-btn> AAaa</v-btn>
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
@@ -104,15 +104,15 @@
       none () {
         this.panel = []
       },
-      initialize () {
-        this.exemplars = [
-          {
-            id: 1,
-            name: '23422',
-            description: 'qqqq'
-          }
-        ]
-      },
+      // initialize () {
+      //   this.exemplars = [
+      //     {
+      //       id: 1,
+      //       name: '23422',
+      //       description: 'qqqq'
+      //     }
+      //   ]
+      // },
 
       editItem (item) {
         this.editedIndex = this.exemplars.indexOf(item)

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div></div>
+
     <div>
       <v-tabs
         v-model="active"
@@ -13,7 +13,9 @@
           :key="point.name"
           ripple
         >
-          Пункт: {{point.name}}
+          <div>
+            <v-icon right :if="point.answer == 'Нет'">check_circle</v-icon> Пункт: {{point.name}}
+          </div>
         </v-tab>
         <v-tab-item
           v-for="point in points"
@@ -24,17 +26,27 @@
               <div>{{ point.act }}</div>
               <div>{{ point.description }}</div>
               <div>Штраф:{{ point.fine }}</div>
+              <div class="text-xs-center mt-3">
+                <v-btn color="red" dark @click="setYes(point)">Да
+                  <v-icon dark right>check_circle</v-icon>
+                </v-btn>
+
+                <v-btn color="primary" dark @click="setNo(point)">Нет
+                  <v-icon dark right>remove_circle</v-icon>
+                </v-btn>
+
+                <v-btn dark @click="setNotApplicable(point)">
+                  <v-icon dark left>block</v-icon>Не относится
+                </v-btn>
+              </div>
             </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs>
 
-      <div class="text-xs-center mt-3">
-        <v-btn @click="next">Да</v-btn>
-        <v-btn @click="next">Нет</v-btn>
-        <v-btn @click="next">Не относится</v-btn>
-      </div>
+
     </div>
+    <div>Cуммарный штраф : {{sum}}</div>
   </div>
 </template>
 
@@ -42,6 +54,7 @@
   export default {
     name: 'point-exemplars',
     data: () => ({
+      sum: 0,
       points: [
         {
           'id': 21794,
@@ -83,10 +96,44 @@
       active: null
     }),
     methods: {
+      setYes (point) {
+        point.answer = 'Да'
+        this.next()
+        console.log('point = ' + point)
+      },
+      setNo (point) {
+        point.answer = 'Нет'
+        this.next()
+        console.log('point = ' + point)
+      },
+      setNotApplicable (point) {
+        point.answer = 'Не относится'
+        this.next()
+        console.log('point = ' + point)
+      },
       next () {
         const active = parseInt(this.active)
         const size = this.points.length - 1
         this.active = (active < size ? active + 1 : 0)
+        this.allFins()
+      },
+      allFins () {
+        const pointWithNo = this.points
+          .filter(point => {
+            console.log('point = ' + point.name + ' point.answer = ' + point.answer)
+            return point.answer === 'Нет'
+          }
+          )
+        console.log('pointWithNo.length = ' + pointWithNo.length)
+        if (pointWithNo.length !== 0) {
+          this.sum = pointWithNo.reduce((result, point) => {
+            return result + point.fine
+          }, 0)
+          console.log('this.sum = ' + this.sum)
+        } else {
+          this.sum = 0
+        }
+        console.log('pointWithNo = ' + pointWithNo)
       }
     }
   }
