@@ -3,10 +3,10 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-btn slot="activator" color="primary" dark class="mb-2">Добавить Пользователя</v-btn>
       <v-card>
-    <v-card-title>
-      <v-spacer></v-spacer>
-    </v-card-title>
-    <v-card-text>
+        <v-card-title>
+          <v-spacer></v-spacer>
+        </v-card-title>
+        <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
@@ -88,7 +88,15 @@
         { text: 'Администратор' },
         { text: 'Пользователь' }
       ],
-      users: [ ],
+      users: [
+        {
+          name: 'Вожегов Артём',
+          login: '1',
+          password: '1',
+          email: '1',
+          role: ''
+        }
+      ],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -110,6 +118,11 @@
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       }
+      // ,
+      //
+      // users () {
+      //   return this.$store.state.users
+      // }
     },
 
     watch: {
@@ -124,15 +137,8 @@
 
     methods: {
       initialize () {
-        this.users = [
-          {
-            name: 'Вожегов Артём',
-            login: '1',
-            password: '1',
-            email: '1',
-            role: ''
-          }
-        ]
+        this.users = this.$store.getters.getUsers
+        return null
       },
 
       editItem (item) {
@@ -143,7 +149,7 @@
 
       deleteItem (item) {
         const index = this.users.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.users.splice(index, 1)
+        confirm('Уверены что хотите удалить этого пользователя?') && this.users.splice(index, 1)
       },
 
       close () {
