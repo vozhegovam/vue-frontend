@@ -14,7 +14,7 @@
           ripple
         >
           <div>
-            <v-icon right :if="point.answer == 'Нет'">check_circle</v-icon> Пункт: {{point.name}}
+            <v-icon right>{{getImageByAnswer(point.answer)}}</v-icon> Пункт: {{point.name}}
           </div>
         </v-tab>
         <v-tab-item
@@ -96,6 +96,17 @@
       active: null
     }),
     methods: {
+      getImageByAnswer (answer) {
+        if (answer === 'Да') {
+          return 'check_circle'
+        }
+        if (answer === 'Нет') {
+          return 'remove_circle'
+        }
+        if (answer === 'Не относится') {
+          return 'block'
+        }
+      },
       setYes (point) {
         point.answer = 'Да'
         this.next()
@@ -120,7 +131,6 @@
       allFins () {
         const pointWithNo = this.points
           .filter(point => {
-            console.log('point = ' + point.name + ' point.answer = ' + point.answer)
             return point.answer === 'Нет'
           }
           )
@@ -129,11 +139,9 @@
           this.sum = pointWithNo.reduce((result, point) => {
             return result + point.fine
           }, 0)
-          console.log('this.sum = ' + this.sum)
         } else {
           this.sum = 0
         }
-        console.log('pointWithNo = ' + pointWithNo)
       }
     }
   }
