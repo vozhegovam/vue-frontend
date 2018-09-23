@@ -35,13 +35,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="createUpdateUser(editedItem)">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <v-data-table
       :headers="headers"
-      :items="users"
+      :items="this.$store.getters.getUsers"
       hide-actions
       class="elevation-1"
     >
@@ -88,17 +88,10 @@
         { text: 'Администратор' },
         { text: 'Пользователь' }
       ],
-      users: [
-        {
-          name: 'Вожегов Артём',
-          login: '1',
-          password: '1',
-          email: '1',
-          role: ''
-        }
-      ],
+      users: [ ],
       editedIndex: -1,
       editedItem: {
+        id: null,
         name: '',
         login: '',
         password: '',
@@ -106,6 +99,7 @@
         role: ''
       },
       defaultItem: {
+        id: null,
         name: '',
         login: '',
         password: '',
@@ -118,11 +112,6 @@
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       }
-      // ,
-      //
-      // users () {
-      //   return this.$store.state.users
-      // }
     },
 
     watch: {
@@ -132,13 +121,31 @@
     },
 
     created () {
-      this.initialize()
+      this.$store.dispatch('LOAD_USERS')
+      this.users = this.$store.getters.getUsers
+    },
+
+    mounted: function () {
+
     },
 
     methods: {
       initialize () {
+        console.log('START')
+        console.log('USERS = ' + this.$store.getters.getUsers)
         this.users = this.$store.getters.getUsers
         return null
+      },
+
+      createUpdateUser (user) {
+        console.log('USER.ID = ' + user.id)
+        if (user.id === null) {
+          console.log('CREATE')
+          this.$store.dispatch('ADD_NEW_USER', { user: user })
+        } else {
+          console.log('UPDATE')
+          this.$store.dispatch('UPDATE_USER', { user: user })
+        }
       },
 
       editItem (item) {

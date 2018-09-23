@@ -13,31 +13,48 @@ export default {
   mutations: {
     SET_USERS (state, users) {
       state.users = users
+    },
+    ADD_USER: (state, { user }) => {
+      state.projects.push(user)
+    },
+    UPDATE_USER: (state, { user }) => {
+      let idx = state.users.map(p => p.id).indexOf(user.id)
+      state.users.splice(idx, 1, user)
     }
   },
   actions: {
-    loadUsers ({ commit }) {
+    LOAD_USERS: function ({ commit }) {
       console.log('AAAAAAAAAA')
       axios
-        .get('http://localhost:8099/api/users')
+        .get('/api/users/')
         .then(r => r.data)
         .then(users => {
           commit('SET_USERS', users)
         })
+    },
+    ADD_NEW_USER: function ({ commit, state }, { user }) {
+      console.log('user.name = ' + user.name)
+      console.log('user.id = ' + user.id)
+      axios.post('/api/users/add').then((response) => {
+        commit('ADD_USER', { user: response.data })
+      }, (err) => {
+        console.log(err)
+      })
+    },
+    UPDATE_USER: function ({ commit, state }, { user }) {
+      console.log('USER UPDATE = ' + JSON.stringify(user.data))
+      axios.put('/api/users/' + user.id, user).then((response) => {
+        commit('UPDATE_USER', { user: response.data })
+      }, (err) => {
+        console.log(err)
+      })
     }
-
-    // LOAD_USERS: function ({ commit }) {
-    //   axios.get('http://localhost:8099/api/users/').then((response) => {
-    //     commit('SET_USERS', { list: response.data })
-    //   }, (err) => {
-    //     console.log(err)
-    //   })
-    // }
 
   },
 
   getters: {
     getUsers: state => {
+      console.log('getUsers')
       return state.users
     }
   }
