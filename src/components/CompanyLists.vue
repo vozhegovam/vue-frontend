@@ -44,9 +44,12 @@
         this.panel = []
       }
     },
+    created () {
+      this.$store.dispatch('LOAD_LIST_TEMPLATES')
+    },
     computed: {
       listTemplates () {
-        return this.$store.getters.listTemplates
+        return this.$store.getters.getListTemplates
       },
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'

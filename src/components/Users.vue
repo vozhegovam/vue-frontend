@@ -60,9 +60,6 @@
           </v-btn>
         </td>
       </template>
-      <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
     </v-data-table>
   </div>
 </template>
@@ -73,12 +70,7 @@
       dialog: false,
 
       headers: [
-        {
-          text: 'Пользователь',
-          align: 'left',
-          sortable: false,
-          value: 'name'
-        },
+        { text: 'Пользователь', align: 'left', value: 'name' },
         { text: 'Логин', value: 'login' },
         { text: 'Пароль', value: 'password' },
         { text: 'Email', value: 'email' },
@@ -88,7 +80,6 @@
         { text: 'Администратор' },
         { text: 'Пользователь' }
       ],
-      users: [ ],
       editedIndex: -1,
       editedItem: {
         id: null,
@@ -122,20 +113,9 @@
 
     created () {
       this.$store.dispatch('LOAD_USERS')
-      this.users = this.$store.getters.getUsers
-    },
-
-    mounted: function () {
-
     },
 
     methods: {
-      initialize () {
-        console.log('START')
-        console.log('USERS = ' + this.$store.getters.getUsers)
-        this.users = this.$store.getters.getUsers
-        return null
-      },
 
       createUpdateUser (user) {
         console.log('USER.ID = ' + user.id)
@@ -146,34 +126,23 @@
           console.log('UPDATE')
           this.$store.dispatch('UPDATE_USER', { user: user })
         }
+        this.close()
       },
 
       editItem (item) {
-        this.editedIndex = this.users.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
-      deleteItem (item) {
-        const index = this.users.indexOf(item)
-        confirm('Уверены что хотите удалить этого пользователя?') && this.users.splice(index, 1)
+      deleteItem (user) {
+        confirm('Уверены что хотите удалить этого пользователя?') && this.$store.dispatch('REMOVE_USER', { user })
       },
-
       close () {
         this.dialog = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.users[this.editedIndex], this.editedItem)
-        } else {
-          this.users.push(this.editedItem)
-        }
-        this.close()
       }
     }
   }

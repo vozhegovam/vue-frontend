@@ -29,12 +29,12 @@
     props: ['id'],
     computed: {
       pointTemplatesByParentId () {
-        const id = this.id
-        return this.$store.getters.pointByParentId(id)
-      },
-      pointTemplates () {
-        return this.$store.getters.getPointTemplates.filter(pointTemplate => (pointTemplate.parentId === this.id))
+        return this.$store.getters.getPointsByParent
       }
+    },
+    created () {
+      console.log('ID = ' + this.id)
+      this.$store.dispatch('LOAD_POINT_TEMPLATES', { listId: this.id })
     }
   }
 </script>

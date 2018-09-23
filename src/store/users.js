@@ -15,16 +15,20 @@ export default {
       state.users = users
     },
     ADD_USER: (state, { user }) => {
-      state.projects.push(user)
+      state.users.push(user)
     },
     UPDATE_USER: (state, { user }) => {
       let idx = state.users.map(p => p.id).indexOf(user.id)
       state.users.splice(idx, 1, user)
+    },
+    REMOVE_USER: (state, { user }) => {
+      state.users = state.users.filter((currentUser) => {
+        return currentUser.id !== user.id
+      })
     }
   },
   actions: {
     LOAD_USERS: function ({ commit }) {
-      console.log('AAAAAAAAAA')
       axios
         .get('/api/users/')
         .then(r => r.data)
@@ -33,9 +37,7 @@ export default {
         })
     },
     ADD_NEW_USER: function ({ commit, state }, { user }) {
-      console.log('user.name = ' + user.name)
-      console.log('user.id = ' + user.id)
-      axios.post('/api/users/add').then((response) => {
+      axios.post('/api/users/add', user).then((response) => {
         commit('ADD_USER', { user: response.data })
       }, (err) => {
         console.log(err)
@@ -48,13 +50,19 @@ export default {
       }, (err) => {
         console.log(err)
       })
+    },
+    REMOVE_USER: function ({ commit, state }, { user }) {
+      axios.delete('/api/users/' + user.id).then(() => {
+        commit('REMOVE_USER', { user })
+      }, (err) => {
+        console.log(err)
+      })
     }
 
   },
 
   getters: {
     getUsers: state => {
-      console.log('getUsers')
       return state.users
     }
   }

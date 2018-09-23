@@ -7,7 +7,7 @@
           <v-list three-line>
             <template v-for="item in listTemplates">
               <v-list-tile
-                :key="item.name"
+                :key="item.id"
                 :to="'/template/' + item.id"
                 @click=""
               >
@@ -29,9 +29,12 @@
 
   export default {
     components: {VListTileAction},
+    created () {
+      this.$store.dispatch('LOAD_LIST_TEMPLATES')
+    },
     computed: {
       listTemplates () {
-        return this.$store.getters.listTemplates
+        return this.$store.getters.getListTemplates
       }
     }
   }
