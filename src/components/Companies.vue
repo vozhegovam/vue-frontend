@@ -16,10 +16,20 @@
                 <v-text-field v-model="editedItem.description" label="Описание"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.owner" label="Пользователь"></v-text-field>
+                <v-select
+                  :items="this.$store.getters.getUsersAsList"
+                  v-model="editedItem.owner"
+                  label="Пользователь"
+                  single-line
+                ></v-select>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.check" label="Преверка пройдена"></v-text-field>
+                <v-select
+                  :items="yesNoList"
+                  v-model="editedItem.checked"
+                  label="Преверка пройдена"
+                  single-line
+                ></v-select>
               </v-flex>
             </v-layout>
           </v-container>
@@ -27,21 +37,22 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Сохранить</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="createUpdateCompany(editedItem)">Сохранить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <v-data-table
       :headers="headers"
-      :items="corps"
+      :items="this.$store.getters.getCompanies"
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
+        <td class="text-xs-left">{{ props.item.id }}</td>
         <td class="text-xs-left"><a v-bind:href="'/company/' + props.item.id">{{ props.item.name }}</a></td>
         <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="text-xs-left">{{ props.item.owner }}</td>
-        <td class="text-xs-left">{{ props.item.check }}</td>
+        <td class="text-xs-left">{{ getUserByValue(props.item.owner) }}</td>
+        <td class="text-xs-left">{{ getListValueByValue(props.item.checked)}}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -50,9 +61,6 @@
             <v-icon color="pink">delete</v-icon>
           </v-btn>
         </td>
-      </template>
-      <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
   </div>
@@ -63,33 +71,39 @@
     data: () => ({
       dialog: false,
       headers: [
+        { text: 'ID', align: 'left', value: 'id' },
         { text: 'Имя', align: 'left', value: 'name' },
         { text: 'Описание', value: 'description' },
         { text: 'Пользователь', value: 'owner' },
-        { text: 'Проверка пройдена', value: 'check' }
+        { text: 'Проверка пройдена', value: 'checked' }
       ],
       corps: [
       ],
+      yesNoList: [
+        { text: 'Да', value: true },
+        { text: 'Нет', value: false }
+      ],
+      userList: [],
       editedIndex: -1,
       editedItem: {
-        id: '',
+        id: null,
         name: '',
         description: '',
         owner: '',
-        check: ''
+        checked: ''
       },
       defaultItem: {
-        id: '',
+        id: null,
         name: '',
         description: '',
         owner: '',
-        check: 'Не пройдена'
+        checked: false
       }
     }),
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Добавить' : 'Редактировать'
       }
     },
 
@@ -100,54 +114,32 @@
     },
 
     created () {
-      this.initialize()
+      this.$store.dispatch('LOAD_USERS')
+      this.$store.dispatch('LOAD_COMPANIES')
     },
 
     methods: {
-      initialize () {
-        this.corps = [
-          {
-            'id': 1,
-            'name': 'Bobs company',
-            'description': 'qweasdasdasd2222',
-            'owner': null,
-            'check': null
-          },
-          {
-            'id': 2,
-            'name': '123',
-            'description': '321',
-            'owner': null,
-            'check': null
-          },
-          {
-            'id': 3,
-            'name': 'QQqq',
-            'description': 'Wwww',
-            'owner': null,
-            'check': null
-          },
-          {
-            'id': 4,
-            'name': '222',
-            'description': '111',
-            'owner': null,
-            'check': null
-          }
-        ]
+
+      createUpdateCompany (company) {
+        console.log('company.ID = ' + company.check)
+        if (company.id === null) {
+          console.log('CREATE')
+          this.$store.dispatch('ADD_NEW_COMPANY', { company: company })
+        } else {
+          console.log('UPDATE')
+          this.$store.dispatch('UPDATE_COMPANY', { company: company })
+        }
+        this.close()
       },
 
-      editItem (item) {
-        this.editedIndex = this.corps.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+      editItem (company) {
+        this.editedItem = Object.assign({}, company)
         this.dialog = true
       },
 
-      deleteItem (item) {
-        const index = this.corps.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.corps.splice(index, 1)
+      deleteItem (company) {
+        confirm('Уверены что хотите удалить этоу фирму?') && this.$store.dispatch('REMOVE_COMPANY', { company })
       },
-
       close () {
         this.dialog = false
         setTimeout(() => {
@@ -156,13 +148,15 @@
         }, 300)
       },
 
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.corps[this.editedIndex], this.editedItem)
+      getListValueByValue (value) {
+        if (value) {
+          return 'Да'
         } else {
-          this.corps.push(this.editedItem)
+          return 'Нет'
         }
-        this.close()
+      },
+      getUserByValue (id) {
+        return this.$store.getters.getUsers.find(item => { return item.id === id }).name
       }
     }
   }

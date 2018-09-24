@@ -8,7 +8,8 @@ Vue.use(VueAxios, axios)
 
 export default {
   state: {
-    users: []
+    users: [],
+    userList: []
   },
   mutations: {
     SET_USERS (state, users) {
@@ -64,6 +65,12 @@ export default {
   getters: {
     getUsers: state => {
       return state.users
+    },
+    getUsersAsList: state => {
+      state.users.forEach(function (item, i, arr) {
+        state.userList.push({text: item.name, value: item.id})
+      })
+      return state.userList
     }
   }
 }
