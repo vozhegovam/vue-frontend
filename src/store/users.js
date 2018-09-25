@@ -12,7 +12,7 @@ export default {
     userList: []
   },
   mutations: {
-    SET_USERS (state, users) {
+    LOAD_USERS (state, users) {
       state.users = users
     },
     ADD_USER: (state, { user }) => {
@@ -34,7 +34,7 @@ export default {
         .get('/api/users/')
         .then(r => r.data)
         .then(users => {
-          commit('SET_USERS', users)
+          commit('LOAD_USERS', users)
         })
     },
     ADD_NEW_USER: function ({ commit, state }, { user }) {

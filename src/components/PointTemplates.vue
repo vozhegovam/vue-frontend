@@ -33,7 +33,6 @@
       }
     },
     created () {
-      console.log('ID = ' + this.id)
       this.$store.dispatch('LOAD_POINT_TEMPLATES', { listId: this.id })
     }
   }

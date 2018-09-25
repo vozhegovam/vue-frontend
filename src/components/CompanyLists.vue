@@ -46,6 +46,7 @@
     },
     created () {
       this.$store.dispatch('LOAD_LIST_TEMPLATES')
+      this.$store.dispatch('LOAD_LIST_EXEMPLARS_BY_COMPANY', {companyId: this.id})
     },
     computed: {
       listTemplates () {

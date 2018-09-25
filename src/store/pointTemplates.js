@@ -5,7 +5,7 @@ export default {
     pointTemplates: []
   },
   mutations: {
-    SET_POINT_TEMPLATES (state, points) {
+    LOAD_POINT_TEMPLATES (state, points) {
       state.pointTemplates = points
     }
   },

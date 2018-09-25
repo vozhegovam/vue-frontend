@@ -5,7 +5,7 @@ export default {
     listTemplates: []
   },
   mutations: {
-    SET_LIST_TEMPLATES (state, lists) {
+    LOAD_LIST_TEMPLATES (state, lists) {
       state.listTemplates = lists
     }
   },
@@ -15,7 +15,7 @@ export default {
         .get('/api/lists/')
         .then(r => r.data)
         .then(lists => {
-          commit('SET_LIST_TEMPLATES', lists)
+          commit('LOAD_LIST_TEMPLATES', lists)
         })
     }
   },

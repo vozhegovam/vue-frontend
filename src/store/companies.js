@@ -11,7 +11,7 @@ export default {
     companies: []
   },
   mutations: {
-    SET_COMPANIES (state, companies) {
+    LOAD_COMPANIES (state, companies) {
       state.companies = companies
     },
     ADD_COMPANY: (state, { company }) => {
@@ -33,7 +33,7 @@ export default {
         .get('/api/companies/')
         .then(r => r.data)
         .then(companies => {
-          commit('SET_COMPANIES', companies)
+          commit('LOAD_COMPANIES', companies)
         })
     },
     ADD_NEW_COMPANY: function ({ commit, state }, { company }) {

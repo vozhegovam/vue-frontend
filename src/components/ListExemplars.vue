@@ -1,12 +1,13 @@
 <template>
   <div>
     <v-data-table
-      :items="exemplars"
+      :items="getExLists"
       hide-headers
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
+        <td>{{ props.item.id }}</td>
         <td><a v-bind:href="'/list/' + props.item.id">{{ props.item.name }}</a></td>
         <td>{{ props.item.description }}</td>
         <td class="justify-center layout px-0">
@@ -32,7 +33,7 @@
                 <v-text-field v-model="editedItem.name" label="Имя"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.description" label="Описание"></v-text-field>
+                <v-text-field v-model="editedItem.userId" label="Пользователь"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -40,7 +41,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="createUpdateListExemplar(editedItem)">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -53,49 +54,46 @@
     name: 'list-exemplars',
     data: () => ({
       dialog: false,
-      exemplars: [
-        {
-          id: 1,
-          parentId: '1112',
-          companyId: '2',
-          name: '23422',
-          description: 'qqqq'
-        }
-      ],
+      exemplars: [],
       editedIndex: -1,
       editedItem: {
-        id: '',
+        id: null,
         name: '',
-        parentId: this.listId,
-        companyId: this.companyId,
-        description: 0
+        checkListId: null,
+        companyId: null,
+        userId: null,
+        checked: false
       },
       defaultItem: {
-        id: '',
+        id: null,
         name: '',
-        parentId: this.listId,
-        companyId: this.companyId,
-        description: 0
+        checkListId: null,
+        companyId: null,
+        userId: null,
+        checked: false
       }
     }),
     methods: {
-
-      getExemplarByListIdAndConpanyId () {
-        this.exemplars = this.exemplars.filter(exemplar => {
-          console.log(exemplar.name + ' ' + exemplar.parentId + ' ' + exemplar.companyId)
-          return ((exemplar.parentId === this.listId.toString()) && (exemplar.companyId === this.companyId))
-        })
+      createUpdateListExemplar (listExemplar) {
+        listExemplar.checkListId = this.listId
+        listExemplar.companyId = this.companyId
+        if (listExemplar.id === null) {
+          console.log('CREATE listExemplar')
+          this.$store.dispatch('ADD_NEW_LIST_EXEMPLAR', { listExemplar })
+        } else {
+          console.log('UPDATE')
+        }
+        this.close()
       },
 
-      editItem (item) {
-        this.editedIndex = this.exemplars.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+      editItem (listExemplar) {
+        this.editedIndex = this.exemplars.indexOf(listExemplar)
+        this.editedItem = Object.assign({}, listExemplar)
         this.dialog = true
       },
 
-      deleteItem (item) {
-        const index = this.exemplars.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.exemplars.splice(index, 1)
+      deleteItem (listExemplar) {
+        confirm('Вы уверены что хотите удалить этот объект?') && this.$store.dispatch('REMOVE_LIST_EXEMPLAR', { listExemplar })
       },
 
       close () {
@@ -104,23 +102,17 @@
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.exemplars[this.editedIndex], this.editedItem)
-        } else {
-          console.log('this.editedItem.parentId = ' + this.editedItem.parentId + ' this.parentId = ' + this.listId + 'this.name = ' + this.editedItem.name)
-          this.editedItem.companyId = this.companyId
-          this.editedItem.parentId = this.listId
-          this.exemplars.push(this.editedItem)
-        }
-        this.close()
+        this.exemplars = this.$store.getters.getListExemplarsByParentIdAndTemplateId
       }
     },
+    created () {
+      this.$store.dispatch('LOAD_LIST_EXEMPLARS_BY_COMPANY', {companyId: this.companyId})
+    },
     computed: {
-      listTemplates () {
-        return this.$store.getters.listTemplates
+      getExLists () {
+        console.log('this.$store.state.listExemplars = ' + this.$store.state.listExemplars.length)
+        const listId = this.listId
+        return this.$store.state.listExemplars.filter(item => item.checkListId === listId)
       },
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
