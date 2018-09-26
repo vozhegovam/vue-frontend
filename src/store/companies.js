@@ -47,7 +47,7 @@ export default {
     UPDATE_COMPANY: function ({ commit, state }, { company }) {
       console.log('COMPANY UPDATE = ' + JSON.stringify(company.data))
       axios.put('/api/companies/' + company.id, company).then((response) => {
-        commit('UPDATE_COMPANY', { company })
+        commit('UPDATE_COMPANY', { company: response.data })
       }, (err) => {
         console.log(err)
       })

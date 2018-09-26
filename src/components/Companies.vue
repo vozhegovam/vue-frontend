@@ -123,10 +123,8 @@
       createUpdateCompany (company) {
         console.log('company.ID = ' + company.check)
         if (company.id === null) {
-          console.log('CREATE')
           this.$store.dispatch('ADD_NEW_COMPANY', { company: company })
         } else {
-          console.log('UPDATE')
           this.$store.dispatch('UPDATE_COMPANY', { company: company })
         }
         this.close()

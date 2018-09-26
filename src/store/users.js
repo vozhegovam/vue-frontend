@@ -71,6 +71,12 @@ export default {
         state.userList.push({text: item.name, value: item.id})
       })
       return state.userList
+    },
+    getUserNameById: state => id => {
+      return state.users.find(user => user.id === id).name
+    },
+    getUserByValue (id) {
+      return this.$store.getters.getUsers.find(item => { return item.id === id }).name
     }
   }
 }

@@ -9,8 +9,8 @@
         slider-color="yellow"
       >
         <v-tab
-          v-for="point in points"
-          :key="point.name"
+          v-for="point in this.$store.getters.getPointExemplars"
+          :key="point.name + 'p'"
           ripple
         >
           <div>
@@ -18,8 +18,8 @@
           </div>
         </v-tab>
         <v-tab-item
-          v-for="point in points"
-          :key="point.name"
+          v-for="point in this.$store.getters.getPointExemplars"
+          :key="point.exemplarId"
         >
           <v-card flat>
             <v-card-text>
@@ -53,46 +53,10 @@
 <script>
   export default {
     name: 'point-exemplars',
+    props: ['id'],
     data: () => ({
       sum: 0,
-      points: [
-        {
-          'id': 21794,
-          'parentId': 1185,
-          'name': '33',
-          'description': 'Рабочие места сварщиков при выполнении сварки под флюсом труб и других крупногабаритных конструкций оборудованы специальными кабинами с подачей приточного воздуха, тепло- и звукоизоляцией наружных поверхностей и пультом управления сварочным процессом.',
-          'fine': 1000,
-          'act': 'Пункт 80 Правил',
-          'answer': ''
-        },
-        {
-          'id': 21795,
-          'parentId': 1185,
-          'name': '34',
-          'description': 'В местах возможного скопления газа в производственных помещениях установлены газоанализаторы, извещающие об утечках газа звуковыми и световыми сигналами.',
-          'fine': 1000,
-          'act': 'Пункт 3.21 ПОТ РО-14000-003-98',
-          'answer': ''
-        },
-        {
-          'id': 21796,
-          'parentId': 1185,
-          'name': '35',
-          'description': 'Рабочие места сварщиков ограждены экранами или ширмами из негорючих материалов высотой не менее 1,6 м.',
-          'fine': 1000,
-          'act': 'Пункт 7.17 ПОТ РО-14000-003-98',
-          'answer': ''
-        },
-        {
-          'id': 21797,
-          'parentId': 1185,
-          'name': '36',
-          'description': ' Места проведения погрузочно-разгрузочных работ оборудованы знаками безопасности.',
-          'fine': 1000,
-          'act': 'Пункт 5.30 ПОТ Р М 006-97',
-          'answer': ''
-        }
-      ],
+      points: [],
       active: null
     }),
     methods: {
@@ -108,33 +72,36 @@
         }
       },
       setYes (point) {
+        console.log(JSON.stringify(point))
         point.answer = 'Да'
+        this.$store.dispatch('UPDATE_POINT_EXEMPLAR', { pointExemplar: point })
         this.next()
-        console.log('point = ' + point)
       },
       setNo (point) {
+        console.log(JSON.stringify(point))
         point.answer = 'Нет'
+        this.$store.dispatch('UPDATE_POINT_EXEMPLAR', { pointExemplar: point })
         this.next()
-        console.log('point = ' + point)
       },
       setNotApplicable (point) {
+        console.log(JSON.stringify(point))
         point.answer = 'Не относится'
+        this.$store.dispatch('UPDATE_POINT_EXEMPLAR', { pointExemplar: point })
         this.next()
-        console.log('point = ' + point)
       },
       next () {
         const active = parseInt(this.active)
-        const size = this.points.length - 1
+        const size = this.$store.getters.getPointExemplars.length - 1
         this.active = (active < size ? active + 1 : 0)
         this.allFins()
       },
       allFins () {
-        const pointWithNo = this.points
+        this.$store.getters.getPointExemplars
           .filter(point => {
             return point.answer === 'Нет'
           }
           )
-        console.log('pointWithNo.length = ' + pointWithNo.length)
+
         if (pointWithNo.length !== 0) {
           this.sum = pointWithNo.reduce((result, point) => {
             return result + point.fine
@@ -143,6 +110,28 @@
           this.sum = 0
         }
       }
+    },
+    computed(){
+      allFins ()
+      {
+        const pointWithNo = this.$store.getters.getPointExemplars
+          .filter(point => {
+              return point.answer === 'Нет'
+            }
+          )
+
+        if (pointWithNo.length !== 0) {
+          this.sum = pointWithNo.reduce((result, point) => {
+            return result + point.fine
+          }, 0)
+        } else {
+          this.sum = 0
+        }
+      }
+    },
+    created () {
+      console.log('ID = ' + this.id)
+      this.$store.dispatch('LOAD_POINT_EXEMPLARS', {listExemplarId: this.id})
     }
   }
 </script>

@@ -13,7 +13,6 @@ export default {
   mutations: {
     LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY (state, listExemplars) {
       state.listExemplars = listExemplars
-      console.log('listExemplars = ' + state.listExemplars)
     },
     ADD_LIST_EXEMPLAR: (state, { listExemplar }) => {
       state.listExemplars.push(listExemplar)
@@ -46,13 +45,8 @@ export default {
         })
     },
     ADD_NEW_LIST_EXEMPLAR: function ({ commit, state }, { listExemplar }) {
-      console.log('listExemplar = ' + listExemplar.id)
-      console.log('name = ' + listExemplar.name)
-      console.log('checkListId = ' + listExemplar.checkListId)
-      console.log('companyId = ' + listExemplar.companyId)
-      console.log('userId = ' + listExemplar.userId)
       axios.post('/api/list_ex/add', listExemplar).then((response) => {
-        commit('ADD_LIST_EXEMPLAR', { listExemplar })
+        commit('ADD_LIST_EXEMPLAR', { listExemplar: response.data })
       }, (err) => {
         console.log(err)
       })

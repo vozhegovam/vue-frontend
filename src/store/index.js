@@ -5,11 +5,12 @@ import pointTemplates from './pointTemplates'
 import users from './users'
 import companies from './companies'
 import listExemplars from './listExemplars'
+import pointExemplars from './pointExemplars'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    listTemplates, pointTemplates, users, companies, listExemplars
+    listTemplates, pointTemplates, users, companies, listExemplars, pointExemplars
   }
 })

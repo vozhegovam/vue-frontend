@@ -46,6 +46,7 @@
     },
     created () {
       this.$store.dispatch('LOAD_LIST_TEMPLATES')
+      this.$store.dispatch('LOAD_USERS')
       this.$store.dispatch('LOAD_LIST_EXEMPLARS_BY_COMPANY', {companyId: this.id})
     },
     computed: {
@@ -53,7 +54,7 @@
         return this.$store.getters.getListTemplates
       },
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Создать' : 'Редактировать'
       }
     }
   }

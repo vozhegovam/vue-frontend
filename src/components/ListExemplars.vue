@@ -7,9 +7,8 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.id }}</td>
         <td><a v-bind:href="'/list/' + props.item.id">{{ props.item.name }}</a></td>
-        <td>{{ props.item.description }}</td>
+        <td>{{ getUserByValue(props.item.userId) }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -33,7 +32,12 @@
                 <v-text-field v-model="editedItem.name" label="Имя"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.userId" label="Пользователь"></v-text-field>
+                <v-select
+                  :items="this.$store.getters.getUsersAsList"
+                  v-model="editedItem.userId"
+                  label="Пользователь"
+                  single-line
+                ></v-select>
               </v-flex>
             </v-layout>
           </v-container>
@@ -78,10 +82,9 @@
         listExemplar.checkListId = this.listId
         listExemplar.companyId = this.companyId
         if (listExemplar.id === null) {
-          console.log('CREATE listExemplar')
           this.$store.dispatch('ADD_NEW_LIST_EXEMPLAR', { listExemplar })
         } else {
-          console.log('UPDATE')
+          this.$store.dispatch('UPDATE_LIST_EXEMPLAR', { listExemplar })
         }
         this.close()
       },
@@ -103,19 +106,19 @@
           this.editedIndex = -1
         }, 300)
         this.exemplars = this.$store.getters.getListExemplarsByParentIdAndTemplateId
+      },
+      getUserByValue (id) {
+        return this.$store.getters.getUsers.find(item => { return item.id === id }).name
       }
     },
     created () {
-      this.$store.dispatch('LOAD_LIST_EXEMPLARS_BY_COMPANY', {companyId: this.companyId})
     },
     computed: {
       getExLists () {
-        console.log('this.$store.state.listExemplars = ' + this.$store.state.listExemplars.length)
-        const listId = this.listId
-        return this.$store.state.listExemplars.filter(item => item.checkListId === listId)
+        return this.$store.getters.getListExemplarsByParentIdAndTemplateId.filter(item => item.checkListId === this.listId)
       },
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Создать' : 'Редактировать'
       }
     }
   }
