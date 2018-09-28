@@ -46,7 +46,7 @@
 
 
     </div>
-    <div>Cуммарный штраф : {{sum}}</div>
+    <div>Cуммарный штраф : {{this.allFins}}</div>
   </div>
 </template>
 
@@ -72,19 +72,16 @@
         }
       },
       setYes (point) {
-        console.log(JSON.stringify(point))
         point.answer = 'Да'
         this.$store.dispatch('UPDATE_POINT_EXEMPLAR', { pointExemplar: point })
         this.next()
       },
       setNo (point) {
-        console.log(JSON.stringify(point))
         point.answer = 'Нет'
         this.$store.dispatch('UPDATE_POINT_EXEMPLAR', { pointExemplar: point })
         this.next()
       },
       setNotApplicable (point) {
-        console.log(JSON.stringify(point))
         point.answer = 'Не относится'
         this.$store.dispatch('UPDATE_POINT_EXEMPLAR', { pointExemplar: point })
         this.next()
@@ -93,39 +90,21 @@
         const active = parseInt(this.active)
         const size = this.$store.getters.getPointExemplars.length - 1
         this.active = (active < size ? active + 1 : 0)
-        this.allFins()
-      },
+      }
+    },
+    computed: {
       allFins () {
-        this.$store.getters.getPointExemplars
+        const pointWithNo = this.$store.getters.getPointExemplars
           .filter(point => {
             return point.answer === 'Нет'
           }
           )
-
         if (pointWithNo.length !== 0) {
-          this.sum = pointWithNo.reduce((result, point) => {
+          return pointWithNo.reduce((result, point) => {
             return result + point.fine
           }, 0)
         } else {
-          this.sum = 0
-        }
-      }
-    },
-    computed(){
-      allFins ()
-      {
-        const pointWithNo = this.$store.getters.getPointExemplars
-          .filter(point => {
-              return point.answer === 'Нет'
-            }
-          )
-
-        if (pointWithNo.length !== 0) {
-          this.sum = pointWithNo.reduce((result, point) => {
-            return result + point.fine
-          }, 0)
-        } else {
-          this.sum = 0
+          return 0
         }
       }
     },

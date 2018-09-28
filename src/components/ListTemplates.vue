@@ -1,26 +1,44 @@
 <template>
   <div>
-    <h1>Шаблоны проверочных листов</h1>
-    <v-layout row>
-      <v-flex>
-        <v-card>
-          <v-list three-line>
-            <template v-for="item in listTemplates">
-              <v-list-tile
-                :key="item.id"
-                :to="'/template/' + item.id"
-                @click=""
-              >
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="item.name"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="item.description"></v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </template>
-          </v-list>
-        </v-card>
-      </v-flex>
-    </v-layout>
+    <v-breadcrumbs>
+      <v-icon slot="divider">chevron_right</v-icon>
+      <v-breadcrumbs-item :disabled="true">
+        Проверочные листы
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
+    <div>
+      <v-card>
+        <v-container
+          fluid
+          grid-list-lg
+        >
+          <v-layout row wrap
+                    v-for="item in listTemplates"
+                    :key="item.id">
+            <v-flex xs12>
+              <v-card>
+                <v-card-title>
+                  <v-flex xs10>
+                    <a :href="'/template/' + item.id">№ {{item.name}}</a>
+                  </v-flex>
+                  <v-flex xs2>
+                    <v-btn icon class="mx-0" @click="editItem(props.item)">
+                      <v-icon color="teal">edit</v-icon>
+                    </v-btn>
+                    <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+                      <v-icon color="pink">delete</v-icon>
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12>
+                    {{item.description}}
+                  </v-flex>
+                </v-card-title>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </div>
   </div>
 </template>
 

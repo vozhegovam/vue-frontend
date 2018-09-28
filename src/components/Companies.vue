@@ -48,7 +48,6 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.id }}</td>
         <td class="text-xs-left"><a v-bind:href="'/company/' + props.item.id">{{ props.item.name }}</a></td>
         <td class="text-xs-left">{{ props.item.description }}</td>
         <td class="text-xs-left">{{ getUserByValue(props.item.owner) }}</td>
@@ -71,7 +70,6 @@
     data: () => ({
       dialog: false,
       headers: [
-        { text: 'ID', align: 'left', value: 'id' },
         { text: 'Имя', align: 'left', value: 'name' },
         { text: 'Описание', value: 'description' },
         { text: 'Пользователь', value: 'owner' },

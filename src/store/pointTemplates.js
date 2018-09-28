@@ -15,7 +15,7 @@ export default {
         .get('/api/points/' + listId)
         .then(r => r.data)
         .then(points => {
-          commit('SET_POINT_TEMPLATES', points)
+          commit('LOAD_POINT_TEMPLATES', points)
         })
     }
   },
