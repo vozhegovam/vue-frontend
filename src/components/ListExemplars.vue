@@ -7,7 +7,7 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td><a v-bind:href="'/list/' + props.item.id">{{ props.item.name }}</a></td>
+        <td><a v-bind:href="'/list/' + props.item.id + '/template_id=' + listId + '/company_id=' + companyId">{{ props.item.name }}</a></td>
         <td>{{ getUserByValue(props.item.userId) }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">

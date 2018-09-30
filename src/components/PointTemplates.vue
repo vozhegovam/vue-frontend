@@ -2,15 +2,58 @@
   <div>
     <v-breadcrumbs>
       <v-icon slot="divider">chevron_right</v-icon>
-      <v-breadcrumbs-item :disabled="true">
+      <v-breadcrumbs-item :disabled="false" :href="'/templates'">
         Проверочные листы
       </v-breadcrumbs-item>
-      <v-breadcrumbs-item :disabled="false">
-        № {{this.$state.getters.getListTemplateById.name}}
+      <v-breadcrumbs-item v-if="listTemplateById !== null"
+                          :disabled="true">
+        № {{listTemplateById.name}}
       </v-breadcrumbs-item>
     </v-breadcrumbs>
+
     <div>
+      <v-dialog v-model="dialog" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <v-spacer></v-spacer>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.name" label="Имя"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-textarea auto-grow v-model="editedItem.description" label="Описание"></v-textarea>
+                </v-flex>
+                <v-flex xs12>
+                  <v-textarea auto-grow v-model="editedItem.act" label="Закон"></v-textarea>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.fine" label="Штраф"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="createUpdateUser(editedItem)">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-card>
+        <div v-if="listTemplateById !== null" center>
+          <v-flex xs12>
+            <v-textarea
+              box
+              auto-grow
+              readonly
+              label="Проверочный лист"
+              v-model="listTemplateById.description"
+            ></v-textarea>
+          </v-flex>
+        </div>
         <v-container
           fluid
           grid-list-lg
@@ -25,15 +68,21 @@
                     <b>№ {{item.name}}</b>
                   </v-flex>
                   <v-flex xs2>
-                    <v-btn icon class="mx-0" @click="editItem(props.item)">
+                    <v-btn icon class="mx-0" @click="editItem(item)">
                       <v-icon color="teal">edit</v-icon>
                     </v-btn>
-                    <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+                    <v-btn icon class="mx-0" @click="deleteItem(item)">
                       <v-icon color="pink">delete</v-icon>
                     </v-btn>
                   </v-flex>
                   <v-flex xs12>
-                    {{item.description}}
+                    Описание: {{item.description}}
+                  </v-flex>
+                  <v-flex xs12>
+                    Закон: {{item.act}}
+                  </v-flex>
+                  <v-flex xs12>
+                    Штраф: {{item.fine}}
                   </v-flex>
                 </v-card-title>
               </v-card>
@@ -50,14 +99,57 @@
   export default {
     props: ['id'],
     data: () => ({
-      list: ''
+      list: '',
+      dialog: false,
+      editedIndex: -1,
+      editedItem: {
+        id: null,
+        parentId: this.id,
+        name: '',
+        description: '',
+        fine: 0,
+        act: ''
+      },
+      defaultItem: {
+        id: null,
+        parentId: this.id,
+        name: '',
+        description: '',
+        fine: 0,
+        act: ''
+      }
     }),
     computed: {
       pointTemplatesByParentId () {
         return this.$store.getters.getPointsByParent
+      },
+      listTemplateById () {
+        return this.$store.getters.getListTemplateById
       }
     },
     methods: {
+      createUpdateUser (pointTemplate) {
+        if (pointTemplate.id !== null) {
+          this.$store.dispatch('UPDATE_POINT', { pointTemplate: pointTemplate })
+        }
+        this.close()
+      },
+
+      editItem (pointTemplate) {
+        this.editedItem = Object.assign({}, pointTemplate)
+        this.dialog = true
+      },
+
+      deleteItem (pointTemplate) {
+        confirm('Уверены что хотите удалить этот пункт?') && this.$store.dispatch('REMOVE_POINT', { pointTemplate })
+      },
+      close () {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
+      }
     },
     created () {
       this.$store.dispatch('LOAD_LIST_TEMPLATE', { listId: this.id })

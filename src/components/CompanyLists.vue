@@ -1,27 +1,38 @@
 <template>
   <div>
-    <v-expansion-panel
-      v-model="panel"
-      expand
-    >
-      <v-expansion-panel-content
-        v-for="item in listTemplates"
-        :key="item.id"
+    <v-breadcrumbs>
+      <v-icon slot="divider">chevron_right</v-icon>
+      <v-breadcrumbs-item :disabled="false" :href="'/companies'">
+        Фирмы
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">
+        {{companyById.name}}
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
+    <div>
+      <v-expansion-panel
+        v-model="panel"
+        expand
       >
-        <div slot="header">
-          <h4>№{{item.name}}</h4>
-          <p>{{item.description}}</p>
-        </div>
-        <v-card>
-          <v-card-text class="grey lighten-3">
-            <list-exemplars :listId ="item.id" :companyId = id ></list-exemplars>
-          </v-card-text>
-        </v-card>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    <div class="d-flex justify-between align-center mb-3">
-      <v-btn @click="all">Развернуть всё</v-btn>
-      <v-btn @click="none">Свернуь всё</v-btn>
+        <v-expansion-panel-content
+          v-for="item in listTemplates"
+          :key="item.id"
+        >
+          <div slot="header">
+            <h4>№{{item.name}}</h4>
+            <p>{{item.description}}</p>
+          </div>
+          <v-card>
+            <v-card-text class="grey lighten-3">
+              <list-exemplars :listId ="item.id" :companyId = id ></list-exemplars>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <div class="d-flex justify-between align-center mb-3">
+        <v-btn @click="all">Развернуть всё</v-btn>
+        <v-btn @click="none">Свернуь всё</v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +59,7 @@
       this.$store.dispatch('LOAD_LIST_TEMPLATES')
       this.$store.dispatch('LOAD_USERS')
       this.$store.dispatch('LOAD_LIST_EXEMPLARS_BY_COMPANY', {companyId: this.id})
+      this.$store.dispatch('LOAD_COMPANY', {companyId: this.id})
     },
     computed: {
       listTemplates () {
@@ -55,6 +67,9 @@
       },
       formTitle () {
         return this.editedIndex === -1 ? 'Создать' : 'Редактировать'
+      },
+      companyById () {
+        return this.$store.getters.getCompany
       }
     }
   }

@@ -39,7 +39,7 @@ export default new Router({
       component: CompanyLists
     },
     {
-      path: '/list/:id',
+      path: '/list/:id/template_id=:tid/company_id=:cid',
       props: true,
       name: 'PointExemplars',
       component: PointExemplars

@@ -8,11 +8,15 @@ Vue.use(VueAxios, axios)
 
 export default {
   state: {
-    companies: []
+    companies: [],
+    company: null
   },
   mutations: {
     LOAD_COMPANIES (state, companies) {
       state.companies = companies
+    },
+    LOAD_COMPANY (state, company) {
+      state.company = company
     },
     ADD_COMPANY: (state, { company }) => {
       state.companies.push(company)
@@ -34,6 +38,14 @@ export default {
         .then(r => r.data)
         .then(companies => {
           commit('LOAD_COMPANIES', companies)
+        })
+    },
+    LOAD_COMPANY: function ({ commit }, { companyId }) {
+      axios
+        .get('/api/companies/' + companyId)
+        .then(r => r.data)
+        .then(company => {
+          commit('LOAD_COMPANY', company)
         })
     },
     ADD_NEW_COMPANY: function ({ commit, state }, { company }) {
@@ -65,6 +77,9 @@ export default {
   getters: {
     getCompanies: state => {
       return state.companies
+    },
+    getCompany: state => {
+      return state.company
     }
   }
 }

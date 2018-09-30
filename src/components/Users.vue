@@ -68,7 +68,6 @@
   export default {
     data: () => ({
       dialog: false,
-
       headers: [
         { text: 'Пользователь', align: 'left', value: 'name' },
         { text: 'Логин', value: 'login' },
@@ -101,7 +100,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Создать' : 'Редактировать'
       }
     },
 
@@ -116,14 +115,10 @@
     },
 
     methods: {
-
       createUpdateUser (user) {
-        console.log('USER.ID = ' + user.id)
         if (user.id === null) {
-          console.log('CREATE')
           this.$store.dispatch('ADD_NEW_USER', { user: user })
         } else {
-          console.log('UPDATE')
           this.$store.dispatch('UPDATE_USER', { user: user })
         }
         this.close()

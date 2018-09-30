@@ -1,7 +1,31 @@
 <template>
   <div>
-
+    <v-breadcrumbs>
+      <v-icon slot="divider">chevron_right</v-icon>
+      <v-breadcrumbs-item :disabled="false" :href="'/companies'">
+        Фирмы
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item :href="'/company/' + cid" v-if="companyById !== null"
+                          :disabled="false">
+        {{companyById.name}}
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item v-if="listTemplateById !== null"
+                          :disabled="true">
+        № {{listTemplateById.name}}
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
     <div>
+      <div v-if="listTemplateById !== null" center>
+        <v-flex xs12>
+          <v-textarea
+            box
+            auto-grow
+            readonly
+            label="Проверочный лист"
+            v-model="listTemplateById.description"
+          ></v-textarea>
+        </v-flex>
+      </div>
       <v-tabs
         v-model="active"
         color="cyan"
@@ -43,8 +67,6 @@
           </v-card>
         </v-tab-item>
       </v-tabs>
-
-
     </div>
     <div>Cуммарный штраф : {{this.allFins}}</div>
   </div>
@@ -53,7 +75,7 @@
 <script>
   export default {
     name: 'point-exemplars',
-    props: ['id'],
+    props: ['id', 'tid', 'cid'],
     data: () => ({
       sum: 0,
       points: [],
@@ -106,11 +128,18 @@
         } else {
           return 0
         }
+      },
+      listTemplateById () {
+        return this.$store.getters.getListTemplateById
+      },
+      companyById () {
+        return this.$store.getters.getCompany
       }
     },
     created () {
-      console.log('ID = ' + this.id)
+      this.$store.dispatch('LOAD_LIST_TEMPLATE', { listId: this.tid })
       this.$store.dispatch('LOAD_POINT_EXEMPLARS', {listExemplarId: this.id})
+      this.$store.dispatch('LOAD_COMPANY', {companyId: this.cid})
     }
   }
 </script>
