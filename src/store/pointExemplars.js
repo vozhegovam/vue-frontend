@@ -20,6 +20,14 @@ export default {
     }
   },
   actions: {
+    LOAD_POINT_EXEMPLARS_BY_COMPANY: function ({ commit }, { companyId }) {
+      axios
+        .get('/api/point_ex/company_id=' + companyId)
+        .then(r => r.data)
+        .then(pointExemplars => {
+          commit('LOAD_POINT_EXEMPLARS', pointExemplars)
+        })
+    },
     LOAD_POINT_EXEMPLARS: function ({ commit }, { listExemplarId }) {
       axios
         .get('/api/point_ex/' + listExemplarId)

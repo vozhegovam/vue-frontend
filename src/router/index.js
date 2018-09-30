@@ -6,6 +6,7 @@ import ListTemplates from '@/components/ListTemplates'
 import PointTemplates from '@/components/PointTemplates'
 import CompanyLists from '@/components/CompanyLists'
 import PointExemplars from '@/components/PointExemplars'
+import Report from '@/components/Report'
 
 Vue.use(Router)
 
@@ -43,6 +44,12 @@ export default new Router({
       props: true,
       name: 'PointExemplars',
       component: PointExemplars
+    },
+    {
+      path: '/report/:id',
+      props: true,
+      name: 'Report',
+      component: Report
     }
   ],
   mode: 'history'

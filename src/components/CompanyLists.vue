@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <v-breadcrumbs>
       <v-icon slot="divider">chevron_right</v-icon>
       <v-breadcrumbs-item :disabled="false" :href="'/companies'">
@@ -9,6 +10,8 @@
         {{companyById.name}}
       </v-breadcrumbs-item>
     </v-breadcrumbs>
+    </div>
+    <div><v-btn small color="primary" :to="'/report/' + id" class="mb-2">Сформировать отчёт</v-btn></div>
     <div>
       <v-expansion-panel
         v-model="panel"
