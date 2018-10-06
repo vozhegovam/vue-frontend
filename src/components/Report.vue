@@ -11,7 +11,7 @@
         </v-breadcrumbs-item>
       </v-breadcrumbs>
     </div>
-    <div v-for="list in listExemplarsWithTeplate">
+    <div v-for="list in listExemplarsWithTemplate">
       <v-card>
         <v-flex xs12>
           <v-textarea
@@ -63,10 +63,12 @@
       this.$store.dispatch('LOAD_POINT_EXEMPLARS_BY_COMPANY', { companyId: this.id })
     },
     computed: {
-      listExemplarsWithTeplate () {
+      listExemplarsWithTemplate () {
+        console.log('this.$store.getters.getListExemplarWithTemplates = ' + this.$store.getters.getListExemplarWithTemplates.length)
         return this.$store.getters.getListExemplarWithTemplates
       },
       pointExemplars () {
+        console.log('this.$store.getters.getPointExemplars.filter(point => { return point.answer === \'Нет\' }) = ' + this.$store.getters.getPointExemplars.filter(point => { return point.answer === 'Нет' }).length)
         return this.$store.getters.getPointExemplars.filter(point => { return point.answer === 'Нет' })
       },
       companyById () {

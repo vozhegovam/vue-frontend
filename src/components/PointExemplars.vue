@@ -5,24 +5,24 @@
       <v-breadcrumbs-item :disabled="false" :href="'/companies'">
         Фирмы
       </v-breadcrumbs-item>
-      <v-breadcrumbs-item :href="'/company/' + cid" v-if="companyById !== null"
+      <v-breadcrumbs-item v-if="listExemplarWithTemplate !== null" :href="'/company/' + listExemplarWithTemplate.companyId"
                           :disabled="false">
-        {{companyById.name}}
+        {{listExemplarWithTemplate.companyName}}
       </v-breadcrumbs-item>
-      <v-breadcrumbs-item v-if="listTemplateById !== null"
+      <v-breadcrumbs-item v-if="listExemplarWithTemplate !== null"
                           :disabled="true">
-        № {{listTemplateById.name}}
+        № {{listExemplarWithTemplate.templateName}}
       </v-breadcrumbs-item>
     </v-breadcrumbs>
     <div>
-      <div v-if="listTemplateById !== null" center>
+      <div v-if="listExemplarWithTemplate !== null" center>
         <v-flex xs12>
           <v-textarea
             box
             auto-grow
             readonly
             label="Проверочный лист"
-            v-model="listTemplateById.description"
+            v-model="listExemplarWithTemplate.templateDescription"
           ></v-textarea>
         </v-flex>
       </div>
@@ -75,11 +75,11 @@
 <script>
   export default {
     name: 'point-exemplars',
-    props: ['id', 'tid', 'cid'],
+    props: ['id'],
     data: () => ({
       sum: 0,
       points: [],
-      active: null
+      active: 0
     }),
     methods: {
       getImageByAnswer (answer) {
@@ -129,15 +129,15 @@
           return 0
         }
       },
-      listTemplateById () {
-        return this.$store.getters.getListTemplateById
+      listExemplarWithTemplate () {
+        return this.$store.getters.getListExemplarWithTemplate
       },
       companyById () {
         return this.$store.getters.getCompany
       }
     },
     created () {
-      this.$store.dispatch('LOAD_LIST_TEMPLATE', { listId: this.tid })
+      this.$store.dispatch('LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID', { listId: this.id })
       this.$store.dispatch('LOAD_POINT_EXEMPLARS', {listExemplarId: this.id})
       this.$store.dispatch('LOAD_COMPANY', {companyId: this.cid})
     }

@@ -1,78 +1,89 @@
 <template>
   <div>
     <div>
-    <v-breadcrumbs>
-      <v-icon slot="divider">chevron_right</v-icon>
-      <v-breadcrumbs-item :disabled="false" :href="'/companies'">
-        Фирмы
-      </v-breadcrumbs-item>
-      <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">
-        {{companyById.name}}
-      </v-breadcrumbs-item>
-    </v-breadcrumbs>
+      <v-breadcrumbs>
+        <v-icon slot="divider">chevron_right</v-icon>
+        <v-breadcrumbs-item :disabled="false" :href="'/companies'">
+          Фирмы
+        </v-breadcrumbs-item>
+        <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">
+          {{companyById.name}}
+        </v-breadcrumbs-item>
+      </v-breadcrumbs>
     </div>
-    <div><v-btn small color="primary" :to="'/report/' + id" class="mb-2">Сформировать отчёт</v-btn></div>
     <div>
-      <v-expansion-panel
-        v-model="panel"
-        expand
-      >
-        <v-expansion-panel-content
-          v-for="item in listTemplates"
-          :key="item.id"
+      <v-card>
+        <v-layout row wrap align-center>
+          <v-flex xs1>
+          </v-flex>
+          <v-flex xs3>
+            <v-btn small block :to="'/report/' + id" class="mb-2">Сформировать отчёт</v-btn>
+          </v-flex>
+          <v-flex xs4>
+          </v-flex>
+          <v-flex xs3>
+            <v-checkbox
+              :label="`Только незаполненные`"
+              v-model="checkbox"
+            ></v-checkbox>
+          </v-flex>
+        </v-layout>
+        <v-container
+          fluid
+          grid-list-lg
         >
-          <div slot="header">
-            <h4>№{{item.name}}</h4>
-            <p>{{item.description}}</p>
-          </div>
-          <v-card>
-            <v-card-text class="grey lighten-3">
-              <list-exemplars :listId ="item.id" :companyId = id ></list-exemplars>
-            </v-card-text>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <div class="d-flex justify-between align-center mb-3">
-        <v-btn @click="all">Развернуть всё</v-btn>
-        <v-btn @click="none">Свернуь всё</v-btn>
-      </div>
+          <v-layout row wrap
+                    v-for="item in listExemplarsWithTemplate"
+                    :key="item.exemplarId">
+            <v-flex xs12>
+              <v-card v-bind:class="getColor(item.checked)">
+                <v-card-title>
+                  <v-flex xs12>
+                    <a :href="'/list/' + item.exemplarId">№ {{item.templateName}}</a>
+                  </v-flex>
+                  <v-flex xs12>
+                    {{item.templateDescription}} + {{item.checked}}
+                  </v-flex>
+                </v-card-title>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
     </div>
   </div>
 </template>
 
 <script>
-  import ListExemplars from './ListExemplars'
-
   export default {
-    components: {ListExemplars},
     props: ['id'],
     name: 'company-lists',
     data: () => ({
-      panel: []
+      panel: [],
+      checkbox: false
     }),
     methods: {
-      all () {
-        this.panel = [...Array(this.listTemplates.length).keys()].map(_ => true)
-      },
-      none () {
-        this.panel = []
+      getColor (isChecked) {
+        if (isChecked) {
+          return 'v-card theme--light green'
+        } else {
+          return 'v-card theme--light'
+        }
       }
     },
     created () {
-      this.$store.dispatch('LOAD_LIST_TEMPLATES')
-      this.$store.dispatch('LOAD_USERS')
-      this.$store.dispatch('LOAD_LIST_EXEMPLARS_BY_COMPANY', {companyId: this.id})
       this.$store.dispatch('LOAD_COMPANY', {companyId: this.id})
+      this.$store.dispatch('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', { companyId: this.id })
     },
     computed: {
-      listTemplates () {
-        return this.$store.getters.getListTemplates
-      },
       formTitle () {
         return this.editedIndex === -1 ? 'Создать' : 'Редактировать'
       },
       companyById () {
         return this.$store.getters.getCompany
+      },
+      listExemplarsWithTemplate () {
+        return this.$store.getters.getListExemplarWithTemplates
       }
     }
   }

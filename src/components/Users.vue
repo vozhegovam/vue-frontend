@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">Добавить Пользователя</v-btn>
+      <v-btn slot="activator" small color="primary" dark class="mb-2">Добавить Пользователя</v-btn>
       <v-card>
         <v-card-title>
           <v-spacer></v-spacer>
