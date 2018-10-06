@@ -47,9 +47,9 @@
         >
           <v-card flat>
             <v-card-text>
-              <div>{{ point.act }}</div>
-              <div>{{ point.description }}</div>
-              <div>Штраф:{{ point.fine }}</div>
+              <div><b>Описание:</b>{{ point.description }}</div>
+              <div><b>Закон:</b> {{ point.act }}</div>
+              <div><b>Штраф:</b>{{ point.fine }}</div>
               <div class="text-xs-center mt-3">
                 <v-btn color="red" dark @click="setYes(point)">Да
                   <v-icon dark right>check_circle</v-icon>

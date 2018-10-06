@@ -35,6 +35,14 @@ export default {
         .then(listExemplarWithTemplate => {
           commit('LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID', listExemplarWithTemplate)
         })
+    },
+    LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY_ID_FOR_REPORT: function ({ commit, state }, { companyId }) {
+      axios
+        .get('/api/lists_with_template/report/' + companyId)
+        .then(r => r.data)
+        .then(listExemplarsWithTemplate => {
+          commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', listExemplarsWithTemplate)
+        })
     }
   },
   getters: {

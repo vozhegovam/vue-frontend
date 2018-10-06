@@ -17,7 +17,7 @@
           <v-flex xs1>
           </v-flex>
           <v-flex xs3>
-            <v-btn small block :to="'/report/' + id" class="mb-2">Сформировать отчёт</v-btn>
+            <v-btn small color="primary" dark :to="'/report/' + id" class="mb-2">Сформировать отчёт</v-btn>
           </v-flex>
           <v-flex xs4>
           </v-flex>
@@ -42,7 +42,7 @@
                     <a :href="'/list/' + item.exemplarId">№ {{item.templateName}}</a>
                   </v-flex>
                   <v-flex xs12>
-                    {{item.templateDescription}} + {{item.checked}}
+                    {{item.templateDescription}}
                   </v-flex>
                 </v-card-title>
               </v-card>
@@ -83,7 +83,11 @@
         return this.$store.getters.getCompany
       },
       listExemplarsWithTemplate () {
-        return this.$store.getters.getListExemplarWithTemplates
+        if (this.checkbox) {
+          return this.$store.getters.getListExemplarWithTemplates.filter(list => { return !list.checked })
+        } else {
+          return this.$store.getters.getListExemplarWithTemplates
+        }
       }
     }
   }

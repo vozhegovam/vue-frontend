@@ -13,18 +13,18 @@
     </div>
     <div v-for="list in listExemplarsWithTemplate">
       <v-card>
-        <v-flex xs12>
-          <v-textarea
-            box
-            auto-grow
-            readonly
-            v-model="'Лист №' + list.templateName + '       Экземпляр: ' + list.exemplarName + '          Описание: ' + list.templateDescription"
-          ></v-textarea>
-        </v-flex>
         <v-container
           fluid
           grid-list-lg
         >
+          <v-flex xs12>
+            <v-textarea
+              box
+              auto-grow
+              readonly
+              v-model="'Лист №' + list.templateName + '          Описание: ' + list.templateDescription"
+            ></v-textarea>
+          </v-flex>
           <v-layout row wrap
                     v-for="point in pointExemplars"
                     :key="point.id">
@@ -35,13 +35,13 @@
                     <b>№ {{point.name}}</b>
                   </v-flex>
                   <v-flex xs12>
-                    Описание: {{point.description}}
+                    <b>Описание:</b> {{point.description}}
                   </v-flex>
                   <v-flex xs12>
-                    Закон: {{point.act}}
+                    <b>Закон:</b> {{point.act}}
                   </v-flex>
                   <v-flex xs12>
-                    Штраф: {{point.fine}}
+                    <b>Штраф:</b> {{point.fine}}
                   </v-flex>
                 </v-card-title>
               </v-card>
@@ -58,7 +58,7 @@
     name: 'report',
     props: ['id'],
     created () {
-      this.$store.dispatch('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_AND_COMPANY', { companyId: this.id })
+      this.$store.dispatch('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY_ID_FOR_REPORT', { companyId: this.id })
       this.$store.dispatch('LOAD_COMPANY', { companyId: this.id })
       this.$store.dispatch('LOAD_POINT_EXEMPLARS_BY_COMPANY', { companyId: this.id })
     },
