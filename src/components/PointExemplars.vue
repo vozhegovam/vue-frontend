@@ -38,7 +38,7 @@
           ripple
         >
           <div>
-            <v-icon right>{{getImageByAnswer(point.answer)}}</v-icon> Пункт: {{point.name}}
+            <v-icon small right>{{getImageByAnswer(point.answer)}}</v-icon> Пункт: {{point.name}}
           </div>
         </v-tab>
         <v-tab-item

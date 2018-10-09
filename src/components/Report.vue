@@ -1,16 +1,24 @@
 <template>
   <div>
-    <div>
-      <v-breadcrumbs>
-        <v-icon slot="divider">chevron_right</v-icon>
-        <v-breadcrumbs-item :disabled="false" :href="'/companies'">
-          Фирмы
-        </v-breadcrumbs-item>
-        <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">
-          {{companyById.name}}
-        </v-breadcrumbs-item>
-      </v-breadcrumbs>
-    </div>
+    <v-layout row wrap>
+      <v-flex xs8>
+        <v-breadcrumbs>
+          <v-icon slot="divider">chevron_right</v-icon>
+          <v-breadcrumbs-item :disabled="false" :href="'/companies'">
+            Фирмы
+          </v-breadcrumbs-item>
+          <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">
+            {{companyById.name}}
+          </v-breadcrumbs-item>
+        </v-breadcrumbs>
+      </v-flex>
+      <v-flex xs3>
+        <v-btn small block color="primary" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
+      </v-flex>
+      <v-flex xs1>
+        Файл: <a v-if="this.$store.getters.getReportPath != null" :href="this.$store.getters.getReportPath">Скачать</a>
+      </v-flex>
+    </v-layout>
     <div v-for="list in listExemplarsWithTemplate">
       <v-card>
         <v-container
@@ -22,7 +30,7 @@
               box
               auto-grow
               readonly
-              v-model="'Лист №' + list.templateName + '          Описание: ' + list.templateDescription"
+              v-model="'Лист №' + list.templateName + '   Описание: ' + list.templateDescription"
             ></v-textarea>
           </v-flex>
           <v-layout row wrap
@@ -64,11 +72,9 @@
     },
     computed: {
       listExemplarsWithTemplate () {
-        console.log('this.$store.getters.getListExemplarWithTemplates = ' + this.$store.getters.getListExemplarWithTemplates.length)
         return this.$store.getters.getListExemplarWithTemplates
       },
       pointExemplars () {
-        console.log('this.$store.getters.getPointExemplars.filter(point => { return point.answer === \'Нет\' }) = ' + this.$store.getters.getPointExemplars.filter(point => { return point.answer === 'Нет' }).length)
         return this.$store.getters.getPointExemplars.filter(point => { return point.answer === 'Нет' })
       },
       companyById () {
@@ -76,6 +82,11 @@
       }
     },
     methods: {
+      redirectToFile () {
+        console.log('START')
+        this.$store.dispatch('LOAD_REPORT', { companyId: this.id })
+//        this.$route.router.go(this.$store.getters.getReportPath)
+      }
     }
   }
 </script>

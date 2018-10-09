@@ -119,7 +119,6 @@
     methods: {
 
       createUpdateCompany (company) {
-        console.log('company.ID = ' + company.check)
         if (company.id === null) {
           this.$store.dispatch('ADD_NEW_COMPANY', { company: company })
         } else {

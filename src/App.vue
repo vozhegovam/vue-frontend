@@ -55,7 +55,7 @@
       drawer: null,
       items: [
         {icon: 'contacts', title: 'Пользователи', url: '/users'},
-        {icon: 'account_balance', title: 'Фирмы', url: '/companies'},
+        {icon: 'account_balance', title: 'Фирмы', url: '/'},
         {icon: 'assignment', title: 'Проверочные листы', url: '/templates'}
       ],
       right: null

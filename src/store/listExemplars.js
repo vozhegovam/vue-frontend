@@ -59,7 +59,6 @@ export default {
       })
     },
     REMOVE_LIST_EXEMPLAR: function ({ commit, state }, { listExemplar }) {
-      console.log('DELETE = ' + listExemplar.id)
       axios.delete('/api/list_ex/' + listExemplar.id).then(() => {
         commit('REMOVE_LIST_EXEMPLAR', { listExemplar })
       }, (err) => {

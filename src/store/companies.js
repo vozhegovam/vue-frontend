@@ -49,7 +49,6 @@ export default {
         })
     },
     ADD_NEW_COMPANY: function ({ commit, state }, { company }) {
-      console.log('company = ' + company.checked)
       axios.post('/api/companies/add', company).then((response) => {
         commit('ADD_COMPANY', { company: response.data })
       }, (err) => {
@@ -57,7 +56,6 @@ export default {
       })
     },
     UPDATE_COMPANY: function ({ commit, state }, { company }) {
-      console.log('COMPANY UPDATE = ' + JSON.stringify(company.data))
       axios.put('/api/companies/' + company.id, company).then((response) => {
         commit('UPDATE_COMPANY', { company: response.data })
       }, (err) => {

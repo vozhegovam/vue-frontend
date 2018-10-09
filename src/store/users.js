@@ -45,7 +45,6 @@ export default {
       })
     },
     UPDATE_USER: function ({ commit, state }, { user }) {
-      console.log('USER UPDATE = ' + JSON.stringify(user.data))
       axios.put('/api/users/' + user.id, user).then((response) => {
         commit('UPDATE_USER', { user: response.data })
       }, (err) => {

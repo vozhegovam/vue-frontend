@@ -9,7 +9,8 @@ Vue.use(VueAxios, axios)
 export default {
   state: {
     listExemplarsWithTemplate: [],
-    listExemplarWithTemplate: null
+    listExemplarWithTemplate: null,
+    reportPath: null
   },
   mutations: {
     LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY (state, listExemplarsWithTemplate) {
@@ -17,6 +18,9 @@ export default {
     },
     LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID (state, listExemplarWithTemplate) {
       state.listExemplarWithTemplate = listExemplarWithTemplate
+    },
+    LOAD_REPORT (state, reportPath) {
+      state.reportPath = reportPath
     }
   },
   actions: {
@@ -43,6 +47,14 @@ export default {
         .then(listExemplarsWithTemplate => {
           commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', listExemplarsWithTemplate)
         })
+    },
+    LOAD_REPORT: function ({ commit, state }, { companyId }) {
+      axios
+        .get('/api/lists_with_template/new_report/' + companyId)
+        .then(r => r.data)
+        .then(reportPath => {
+          commit('LOAD_REPORT', reportPath)
+        })
     }
   },
   getters: {
@@ -51,6 +63,9 @@ export default {
     },
     getListExemplarWithTemplate: state => {
       return state.listExemplarWithTemplate
+    },
+    getReportPath: state => {
+      return state.reportPath
     }
   }
 }
