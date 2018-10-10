@@ -20,6 +20,24 @@
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+          <v-list-group
+            prepend-icon="account_circle"
+            value="true"
+          >
+            <v-list-tile slot="activator">
+              <v-list-tile-title>Администрирование</v-list-tile-title>
+            </v-list-tile>
+
+            <v-list-tile v-for="item in admins"
+                         :key="item.title"
+                         @click=""
+                         :to="item.url">
+              <v-list-tile-title v-text="item.title"></v-list-tile-title>
+              <v-list-tile-action>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list-group>
         </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -34,12 +52,9 @@
         <span class="hidden-sm-and-down">Охрана труда</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>notifications</v-icon>
-      </v-btn>
+      <v-btn icon :to="'/login'">
+        <v-icon>lock</v-icon>
+      </v-btn>l
     </v-toolbar>
     <v-content>
       <router-view></router-view>
@@ -54,8 +69,10 @@
       dialog: false,
       drawer: null,
       items: [
+        {icon: 'account_balance', title: 'Фирмы', url: '/'}
+      ],
+      admins: [
         {icon: 'contacts', title: 'Пользователи', url: '/users'},
-        {icon: 'account_balance', title: 'Фирмы', url: '/'},
         {icon: 'assignment', title: 'Проверочные листы', url: '/templates'}
       ],
       right: null
