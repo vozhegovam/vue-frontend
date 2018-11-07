@@ -15,9 +15,6 @@
       <v-flex xs3>
         <v-btn small block color="primary" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
       </v-flex>
-      <v-flex xs1>
-        Файл: <a v-if="this.$store.getters.getReportPath != null" :href="this.$store.getters.getReportPath">Скачать</a>
-      </v-flex>
     </v-layout>
     <div v-for="list in listExemplarsWithTemplate">
       <v-card>
@@ -83,9 +80,7 @@
     },
     methods: {
       redirectToFile () {
-        console.log('START')
-        this.$store.dispatch('LOAD_REPORT', { companyId: this.id })
-//        this.$route.router.go(this.$store.getters.getReportPath)
+        this.$store.dispatch('LOAD_FILE', { companyId: this.id, fileName: this.id + '.pdf' })
       }
     }
   }

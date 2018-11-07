@@ -26,12 +26,15 @@
                 <v-flex xs12>
                   <v-textarea auto-grow v-model="editedItem.description" label="Описание"></v-textarea>
                 </v-flex>
-                <v-flex xs12>
+                <v-flex v-if="editedItem.act !== null" xs12>
                   <v-textarea auto-grow v-model="editedItem.act" label="Закон"></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editedItem.fine" label="Штраф"></v-text-field>
                 </v-flex>
+                <!--<v-flex xs12>-->
+                <!---->
+                <!--</v-flex>-->
               </v-layout>
             </v-container>
           </v-card-text>
@@ -58,9 +61,9 @@
           fluid
           grid-list-lg
         >
-          <v-layout row wrap
-                    v-for="item in pointTemplatesByParentId"
-                    :key="item.id">
+          <v-layout
+            v-for="item in pointTemplatesByParentId"
+            :key="item.id">
             <v-flex xs12>
               <v-card>
                 <v-card-title>
@@ -76,13 +79,34 @@
                     </v-btn>
                   </v-flex>
                   <v-flex xs12>
-                    Описание: {{item.description}}
+                    <b>Описание:</b> {{item.description}}
                   </v-flex>
+
+                  <v-layout
+                    v-for="child in item.childrenPoints.slice().reverse()"
+                    :key="child.id">
+                    <v-flex xs12>
+                      <v-card>
+                        <v-card-title>
+                          <v-flex xs12>
+                            <b>{{child.name}})</b> {{child.description}}
+                          </v-flex>
+                          <v-flex v-if="child.act !== ''" xs12>
+                            <b>Правовой акт:</b> {{child.act}}
+                          </v-flex>
+                          <v-flex xs12>
+                            <b>Штраф:</b> {{child.fine}}
+                          </v-flex>
+                        </v-card-title>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+
                   <v-flex xs12>
-                    Закон: {{item.act}}
+                    <b>Правовой акт:</b> {{item.act}}
                   </v-flex>
-                  <v-flex xs12>
-                    Штраф: {{item.fine}}
+                  <v-flex v-if="item.childrenPoints.length === 0" xs12>
+                    <b>Штраф:</b> {{item.fine}}
                   </v-flex>
                 </v-card-title>
               </v-card>
@@ -104,19 +128,25 @@
       editedIndex: -1,
       editedItem: {
         id: null,
-        parentId: this.id,
+        parentPoint: '',
+        childrenPoints: [],
+        listTemplate: this.id,
         name: '',
         description: '',
         fine: 0,
-        act: ''
+        act: '',
+        orderNumber: ''
       },
       defaultItem: {
         id: null,
-        parentId: this.id,
+        parentPoint: '',
+        childrenPoints: [],
+        listTemplate: this.id,
         name: '',
         description: '',
         fine: 0,
-        act: ''
+        act: '',
+        orderNumber: ''
       }
     }),
     computed: {
