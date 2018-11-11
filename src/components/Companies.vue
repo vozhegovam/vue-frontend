@@ -23,14 +23,14 @@
                   single-line
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-select
-                  :items="yesNoList"
-                  v-model="editedItem.checked"
-                  label="Преверка пройдена"
-                  single-line
-                ></v-select>
-              </v-flex>
+              <!--<v-flex xs12 sm6 md4>-->
+                <!--<v-select-->
+                  <!--:items="yesNoList"-->
+                  <!--v-model="editedItem.checked"-->
+                  <!--label="Преверка пройдена"-->
+                  <!--single-line-->
+                <!--&gt;</v-select>-->
+              <!--</v-flex>-->
             </v-layout>
           </v-container>
         </v-card-text>
@@ -120,6 +120,7 @@
 
       createUpdateCompany (company) {
         if (company.id === null) {
+          company.checked = false
           this.$store.dispatch('ADD_NEW_COMPANY', { company: company })
         } else {
           this.$store.dispatch('UPDATE_COMPANY', { company: company })
