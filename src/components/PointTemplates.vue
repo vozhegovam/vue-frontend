@@ -32,16 +32,13 @@
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editedItem.fine" label="Штраф"></v-text-field>
                 </v-flex>
-                <!--<v-flex xs12>-->
-                <!---->
-                <!--</v-flex>-->
               </v-layout>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="createUpdateUser(editedItem)">Save</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="createUpdatePointTemplate(editedItem)">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -71,6 +68,7 @@
                     <b>№ {{item.name}}</b>
                   </v-flex>
                   <v-flex xs2>
+                    <v-spacer></v-spacer>
                     <v-btn icon class="mx-0" @click="editItem(item)">
                       <v-icon color="teal">edit</v-icon>
                     </v-btn>
@@ -83,13 +81,21 @@
                   </v-flex>
 
                   <v-layout
-                    v-for="child in item.childrenPoints.slice().reverse()"
+                    v-for="child in item.childrenPoints"
                     :key="child.id">
                     <v-flex xs12>
-                      <v-card>
-                        <v-card-title>
-                          <v-flex xs12>
+                      <v-card no wrap>
+                        <v-card-title xs12>
+                          <v-flex xs10>
                             <b>{{child.name}})</b> {{child.description}}
+                          </v-flex>
+                          <v-flex xs2>
+                            <v-btn icon class="mx-0" @click="editItem(child)">
+                              <v-icon color="teal">edit</v-icon>
+                            </v-btn>
+                            <v-btn icon class="mx-0" @click="deleteItem(child)">
+                              <v-icon color="pink">delete</v-icon>
+                            </v-btn>
                           </v-flex>
                           <v-flex v-if="child.act !== ''" xs12>
                             <b>Правовой акт:</b> {{child.act}}
@@ -158,7 +164,7 @@
       }
     },
     methods: {
-      createUpdateUser (pointTemplate) {
+      createUpdatePointTemplate (pointTemplate) {
         if (pointTemplate.id !== null) {
           this.$store.dispatch('UPDATE_POINT', { pointTemplate: pointTemplate })
         }
@@ -173,6 +179,7 @@
       deleteItem (pointTemplate) {
         confirm('Уверены что хотите удалить этот пункт?') && this.$store.dispatch('REMOVE_POINT', { pointTemplate })
       },
+
       close () {
         this.dialog = false
         setTimeout(() => {

@@ -54,7 +54,7 @@
       <v-spacer></v-spacer>
       <v-btn icon :to="'/login'">
         <v-icon>lock</v-icon>
-      </v-btn>l
+      </v-btn>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
