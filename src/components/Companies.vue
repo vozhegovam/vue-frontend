@@ -18,7 +18,7 @@
               <v-flex xs12 sm6 md4>
                 <v-select
                   :items="this.$store.getters.getUsersAsList"
-                  v-model="editedItem.owner"
+                  v-model="editedItem.user"
                   label="Пользователь"
                   single-line
                 ></v-select>
@@ -50,7 +50,7 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-left"><a v-bind:href="'/company/' + props.item.id">{{ props.item.name }}</a></td>
         <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="text-xs-left">{{ getUserByValue(props.item.owner) }}</td>
+        <td class="text-xs-left">{{ getUserByValue(props.item.user) }}</td>
         <td class="text-xs-left">{{ getListValueByValue(props.item.checked)}}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
@@ -72,7 +72,7 @@
       headers: [
         { text: 'Имя', align: 'left', value: 'name' },
         { text: 'Описание', value: 'description' },
-        { text: 'Пользователь', value: 'owner' },
+        { text: 'Пользователь', value: 'user' },
         { text: 'Проверка пройдена', value: 'checked' }
       ],
       corps: [
@@ -87,14 +87,14 @@
         id: null,
         name: '',
         description: '',
-        owner: '',
+        user: '',
         checked: ''
       },
       defaultItem: {
         id: null,
         name: '',
         description: '',
-        owner: '',
+        user: '',
         checked: false
       }
     }),
@@ -151,6 +151,9 @@
         }
       },
       getUserByValue (id) {
+        if (id === null) {
+          return null
+        }
         return this.$store.getters.getUsers.find(item => { return item.id === id }).name
       }
     }

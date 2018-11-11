@@ -4,7 +4,7 @@
       <v-flex xs8>
         <v-breadcrumbs>
           <v-icon slot="divider">chevron_right</v-icon>
-          <v-breadcrumbs-item :disabled="false" :href="'/companies'">
+          <v-breadcrumbs-item :disabled="false" :href="'/'">
             Фирмы
           </v-breadcrumbs-item>
           <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">
@@ -27,7 +27,7 @@
               box
               auto-grow
               readonly
-              v-model="'Лист №' + list.templateName + '   Описание: ' + list.templateDescription"
+              v-model="'Лист №' + list.templateName + ' | ' + list.templateDescription"
             ></v-textarea>
           </v-flex>
           <v-layout row wrap
@@ -40,13 +40,33 @@
                     <b>№ {{point.name}}</b>
                   </v-flex>
                   <v-flex xs12>
-                    <b>Описание:</b> {{point.description}}
+                    <b>Описание : </b> {{point.description}}
                   </v-flex>
+                  <v-layout
+                    v-for="child in point.children"
+                    :key="child.id">
+                    <v-flex v-if="child.answer === 'Нет'" xs12>
+                      <v-card no wrap>
+                        <v-card-title xs12>
+                          <v-flex xs12>
+                            <b>{{child.name}})</b> {{child.description}}
+                          </v-flex>
+                          <v-flex v-if="child.act !== ''" xs12>
+                            <b>Правовой акт:</b> {{child.act}}
+                          </v-flex>
+                          <v-flex xs12>
+                            <b>Штраф:</b> {{child.fine}}
+                          </v-flex>
+                        </v-card-title>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+
                   <v-flex xs12>
-                    <b>Закон:</b> {{point.act}}
+                    <b>Правовой акт : </b> {{point.act}}
                   </v-flex>
-                  <v-flex xs12>
-                    <b>Штраф:</b> {{point.fine}}
+                  <v-flex v-if="point.children.length === 0"xs12>
+                    <b>Штраф : </b> {{point.fine}}
                   </v-flex>
                 </v-card-title>
               </v-card>

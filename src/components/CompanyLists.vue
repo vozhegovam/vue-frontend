@@ -3,7 +3,7 @@
     <div>
       <v-breadcrumbs>
         <v-icon slot="divider">chevron_right</v-icon>
-        <v-breadcrumbs-item :disabled="false" :href="'/companies'">
+        <v-breadcrumbs-item :disabled="false" :href="'/'">
           Фирмы
         </v-breadcrumbs-item>
         <v-breadcrumbs-item v-if="companyById !== null" :disabled="true">

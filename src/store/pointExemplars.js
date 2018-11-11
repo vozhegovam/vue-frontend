@@ -8,15 +8,36 @@ Vue.use(VueAxios, axios)
 
 export default {
   state: {
-    pointExemplars: []
+    pointExemplars: [],
+    editedExParent: {}
   },
   mutations: {
     LOAD_POINT_EXEMPLARS (state, pointExemplars) {
       state.pointExemplars = pointExemplars
     },
-    UPDATE_POINT_EXEMPLAR: (state, { pointExemplar }) => {
-      let idx = state.pointExemplars.map(p => p.exemplarId).indexOf(pointExemplar.exemplarId)
-      state.pointExemplars.splice(idx, 1, pointExemplar)
+    UPDATE_POINT_EXEMPLAR: (state, pointExemplar) => {
+      if (pointExemplar.parentExemplarId !== null) {
+        state.editedExParent = state.pointExemplars.find((exemplar) => { return exemplar.exemplarId === pointExemplar.parentExemplarId })
+        let pidx = state.pointExemplars.map(p => p.exemplarId).indexOf(pointExemplar.parentExemplarId)
+        let cidx = state.editedExParent.children.map(p => p.exemplarId).indexOf(pointExemplar.exemplarId)
+        const chCount = state.editedExParent.children.length
+        const chWithAnswerCount = state.editedExParent.children.filter(point => { return point.answer !== null }).length
+        if (chWithAnswerCount === chCount) {
+          if (state.editedExParent.children.find(point => { return point.answer === 'Нет' }) !== undefined) {
+            state.editedExParent.answer = 'Нет'
+          } else {
+            state.editedExParent.answer = 'Да'
+          }
+        }
+        state.editedExParent.children.splice(cidx, 1, pointExemplar)
+        state.pointExemplars.splice(pidx, 1, state.editedExParent)
+      } else {
+        let idx = state.pointExemplars.map(p => p.exemplarId).indexOf(pointExemplar.exemplarId)
+        if (pointExemplar.children.length !== 0) {
+          console.log(pointExemplar.children.forEach((point) => { point.answer = pointExemplar.answer }))
+        }
+        state.pointExemplars.splice(idx, 1, pointExemplar)
+      }
     }
   },
   actions: {
@@ -38,7 +59,7 @@ export default {
     },
     UPDATE_POINT_EXEMPLAR: function ({ commit, state }, { pointExemplar }) {
       axios.put('/api/point_ex/' + pointExemplar.exemplarId, pointExemplar).then((response) => {
-        commit('UPDATE_POINT_EXEMPLAR', { pointExemplar: response.data })
+        commit('UPDATE_POINT_EXEMPLAR', pointExemplar)
       }, (err) => {
         console.log(err)
       })

@@ -23,6 +23,11 @@ export default new Router({
       name: 'Companies',
       component: Companies
     },
+    // {
+    //   path: '/companies',
+    //   name: 'Companies',
+    //   component: Companies
+    // },
     {
       path: '/login',
       name: 'Login',
