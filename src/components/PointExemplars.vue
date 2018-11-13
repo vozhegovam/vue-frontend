@@ -65,7 +65,7 @@
                       <v-flex xs2>
                       </v-flex>
                       <v-flex v-if="child.act !== ''" xs12>
-                        <b>Правовой акт : </b> {{child.act}}
+                        <b>Нормативный правовой акт : </b> {{child.act}}
                       </v-flex>
                       <v-flex xs12>
                         <b>Штраф : </b> {{child.fine}}

@@ -37,8 +37,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="createUpdatePointTemplate(editedItem)">Save</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="createUpdatePointTemplate(editedItem)">Сохранить</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -98,7 +98,7 @@
                             </v-btn>
                           </v-flex>
                           <v-flex v-if="child.act !== ''" xs12>
-                            <b>Правовой акт:</b> {{child.act}}
+                            <b>Нормативный правовой акт:</b> {{child.act}}
                           </v-flex>
                           <v-flex xs12>
                             <b>Штраф:</b> {{child.fine}}
@@ -109,7 +109,7 @@
                   </v-layout>
 
                   <v-flex xs12>
-                    <b>Правовой акт:</b> {{item.act}}
+                    <b>Нормативный правовой акт:</b> {{item.act}}
                   </v-flex>
                   <v-flex v-if="item.childrenPoints.length === 0" xs12>
                     <b>Штраф:</b> {{item.fine}}
