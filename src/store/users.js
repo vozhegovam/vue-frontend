@@ -29,7 +29,7 @@ export default {
     }
   },
   actions: {
-    LOAD_USERS: function ({ commit }) {
+    LOAD_USERS: function ({ commit, state }) {
       axios
         .get('/api/users/')
         .then(r => r.data)

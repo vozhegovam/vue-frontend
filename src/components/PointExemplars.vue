@@ -1,5 +1,31 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      color="success"
+      bottom
+      multi-line
+      :timeout="8000"
+    >
+      Лист заполнен. Вернуться к списку листов?
+      <v-btn
+        color="teal darken-4"
+        flat
+        :href="'/company/' + listExemplarWithTemplate.companyId"
+        @click="snackbar = false"
+      >
+      Да
+      </v-btn>
+      <v-btn
+        color="teal darken-4"
+        flat
+        @click="snackbar = false"
+      >
+        Нет
+      </v-btn>
+    </v-snackbar>
+
+
     <v-breadcrumbs>
       <v-icon slot="divider">chevron_right</v-icon>
       <v-breadcrumbs-item :disabled="false" :href="'/'">
@@ -67,9 +93,9 @@
                       <v-flex v-if="child.act !== ''" xs12>
                         <b>Нормативный правовой акт : </b> {{child.act}}
                       </v-flex>
-                      <v-flex xs12>
-                        <b>Штраф : </b> {{child.fine}}
-                      </v-flex>
+                      <!--<v-flex xs12>-->
+                        <!--<b>Штраф : </b> {{child.fine}}-->
+                      <!--</v-flex>-->
                       <div class="text-xs-center mt-3">
                         <v-btn small color="red" dark @click="setYes(child)">Да
                           <v-icon dark right>check_circle</v-icon>
@@ -83,7 +109,7 @@
                 </v-flex>
               </v-layout>
               <div><b>Правовой акт : </b> {{ point.act }}</div>
-              <div v-if="point.children.length === 0"><b>Штраф:</b>{{ point.fine }}</div>
+              <div><b>Штраф:</b>{{ point.fine }}</div>
               <div v-if="point.children.length === 0" class="text-xs-center mt-3">
                 <v-btn color="red" dark @click="setYes(point)">Да
                   <v-icon dark right>check_circle</v-icon>
@@ -114,7 +140,8 @@
       sum: 0,
       points: [],
       parentPointEx: {},
-      active: 0
+      active: 0,
+      snackbar: false
     }),
     methods: {
       getImageByAnswer (answer) {
@@ -160,6 +187,7 @@
         const active = parseInt(this.active)
         const size = this.$store.getters.getPointExemplars.length - 1
         this.active = (active < size ? active + 1 : 0)
+        this.snackbar = this.$store.getters.getPointExemplars.filter(ex => { return ex.answer == null }).length < 1
       }
     },
     computed: {

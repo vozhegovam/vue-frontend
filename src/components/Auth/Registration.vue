@@ -40,7 +40,7 @@
             <v-spacer></v-spacer>
             <v-btn
               color="primary"
-              @click="onSubmit"
+              @click="onSubmit()"
               :disabled="!valid"
             >Create account!</v-btn>
           </v-card-actions>
@@ -56,6 +56,14 @@
   export default {
     data () {
       return {
+        newUser: {
+          id: null,
+          name: '',
+          login: '',
+          password: '',
+          email: '',
+          role: ''
+        },
         email: '',
         password: '',
         confirmPassword: '',
@@ -77,12 +85,10 @@
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
-          const user = {
-            email: this.email,
-            password: this.password
-          }
-
-          console.log(user)
+          this.newUser.email = this.email
+          this.newUser.password = this.password
+          console.log(this.newUser)
+          this.$store.dispatch('REG_REQUEST', { newUser: this.newUser })
         }
       }
     }

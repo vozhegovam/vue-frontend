@@ -10,6 +10,16 @@ module.exports = {
     assetsPublicPath: '/',
 
     proxyTable: {
+      '/registration': {
+        target: 'http://localhost:8099/',
+        secure: true,
+        changeOrigin: true
+      },
+      '/login': {
+        target: 'http://localhost:8099/',
+        secure: true,
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://localhost:8099/api',
         secure: true,

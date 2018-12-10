@@ -10,7 +10,6 @@
         № {{listTemplateById.name}}
       </v-breadcrumbs-item>
     </v-breadcrumbs>
-
     <div>
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
@@ -100,9 +99,6 @@
                           <v-flex v-if="child.act !== ''" xs12>
                             <b>Нормативный правовой акт:</b> {{child.act}}
                           </v-flex>
-                          <v-flex xs12>
-                            <b>Штраф:</b> {{child.fine}}
-                          </v-flex>
                         </v-card-title>
                       </v-card>
                     </v-flex>
@@ -111,7 +107,7 @@
                   <v-flex xs12>
                     <b>Нормативный правовой акт:</b> {{item.act}}
                   </v-flex>
-                  <v-flex v-if="item.childrenPoints.length === 0" xs12>
+                  <v-flex xs12>
                     <b>Штраф:</b> {{item.fine}}
                   </v-flex>
                 </v-card-title>

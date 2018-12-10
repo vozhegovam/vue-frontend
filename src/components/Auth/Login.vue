@@ -4,7 +4,7 @@
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>Login form</v-toolbar-title>
+            <v-toolbar-title>Форма входа</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form v-model="valid" ref="form" validation>
@@ -19,7 +19,7 @@
               <v-text-field
                 prepend-icon="lock"
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 :counter="6"
                 v-model="password"
@@ -51,24 +51,27 @@
         password: '',
         valid: false,
         emailRules: [
-          v => !!v || 'E-mail is required',
-          v => emailRegex.test(v) || 'E-mail must be valid'
+          v => !!v || 'Введите E-mail',
+          v => emailRegex.test(v) || 'Не верный формат E-mail'
         ],
         passwordRules: [
-          v => !!v || 'Password is required',
-          v => (v && v.length >= 6) || 'Password must be equal or more than 6 characters'
+          v => !!v || 'Введите пароль',
+          v => (v && v.length >= 2) || 'Пароль должен быть больше 3 символов'
         ]
       }
     },
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
-          const user = {
-            email: this.email,
+          const userData = {
+            username: this.email,
             password: this.password
           }
-
-          console.log(user)
+          console.log(userData)
+          this.$store.dispatch('AUTH_REQUEST', { userData: userData })
+          //   .then(() => {
+          //   this.$router.push('/')
+          // })
         }
       }
     }

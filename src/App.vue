@@ -52,7 +52,7 @@
         <span class="hidden-sm-and-down">Охрана труда</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :to="'/login'">
+      <v-btn icon :to="'/log'">
         <v-icon>lock</v-icon>
       </v-btn>
     </v-toolbar>

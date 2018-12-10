@@ -8,11 +8,13 @@ import listExemplars from './listExemplars'
 import pointExemplars from './pointExemplars'
 import listForReport from './listForReport'
 import file from './file'
+import auth from './auth/auth'
+import registration from './auth/registration'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    listTemplates, pointTemplates, users, companies, listExemplars, pointExemplars, listForReport, file
+    listTemplates, pointTemplates, users, companies, listExemplars, pointExemplars, listForReport, file, auth, registration
   }
 })
