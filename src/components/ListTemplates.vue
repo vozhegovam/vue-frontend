@@ -6,6 +6,7 @@
         Проверочные листы
       </v-breadcrumbs-item>
     </v-breadcrumbs>
+    <v-btn small color="info" @click="migrateUpdateUser()">Мигрировать из файла</v-btn>
     <div>
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
@@ -92,6 +93,10 @@
           this.$store.dispatch('UPDATE_LIST_TEMPLATE', { listTemplate: listTemplate })
         }
         this.close()
+      },
+
+      migrateUpdateUser () {
+        this.$store.dispatch('MIGRATE_LIST_TEMPLATES')
       },
 
       editItem (listTemplate) {

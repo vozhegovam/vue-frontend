@@ -69,9 +69,9 @@
           }
           console.log(userData)
           this.$store.dispatch('AUTH_REQUEST', { userData: userData })
-          //   .then(() => {
-          //   this.$router.push('/')
-          // })
+            .then(() => {
+              this.$router.push('/')
+            })
         }
       }
     }

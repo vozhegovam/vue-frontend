@@ -9,25 +9,25 @@ import PointExemplars from '@/components/PointExemplars'
 import Report from '@/components/Report'
 import Login from '@/components/Auth/Login'
 import Registration from '@/components/Auth/Registration'
-import types from '../store/auth/auth'
+// import store from '../store'
+// import auth from '../store/auth/auth'
 
 Vue.use(Router)
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
-  const username = localStorage.getItem('username')
-  if (token) {
-    this.$store.commit(types.AUTH_SUCCESS, { token, username })
-    this.$router.push('/')
+  if (token !== null) {
+    next('/')
   } else {
     next()
   }
 }
-const requireAuth = (to, from, next) => {
-  if (store.getters.isAuth) {
+const ifAuthenticated = (to, from, next) => {
+  const token = localStorage.getItem('JWT')
+  if (token !== null) {
     next()
   } else {
-    this.$router.push('/log')
+    next('/log')
   }
 }
 
@@ -44,7 +44,7 @@ const requireAuth = (to, from, next) => {
 //     next()
 //     return
 //   }
-//   next('/login')
+//   next('/log')
 // }
 
 export default new Router({
@@ -53,18 +53,19 @@ export default new Router({
       path: '/users',
       name: 'Users',
       component: Users,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/',
       name: 'Companies',
       component: Companies,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     },
     // {
     //   path: '/companies',
     //   name: 'Companies',
-    //   component: Companies
+    //   component: Companies,
+    //   beforeEnter: ifAuthenticated
     // },
     {
       path: '/log',
@@ -76,40 +77,41 @@ export default new Router({
       path: '/reg',
       name: 'Registration',
       component: Registration,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/templates',
       name: 'ListTemplates',
-      component: ListTemplates
+      component: ListTemplates,
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/template/:id',
       props: true,
       name: 'PointTemplates',
       component: PointTemplates,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/company/:id',
       props: true,
       name: 'CompanyLists',
       component: CompanyLists,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/list/:id',
       props: true,
       name: 'PointExemplars',
       component: PointExemplars,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/report/:id',
       props: true,
       name: 'Report',
       component: Report,
-      beforeEnter: requireAuth
+      beforeEnter: ifAuthenticated
     }
   ],
   mode: 'history'

@@ -23,6 +23,14 @@ export default {
     }
   },
   actions: {
+    MIGRATE_LIST_TEMPLATES: function ({ commit }) {
+      axios
+        .get('/api/lists/update')
+        .then(r => r.data)
+        .then(lists => {
+          commit('LOAD_LIST_TEMPLATES', lists)
+        })
+    },
     LOAD_LIST_TEMPLATES: function ({ commit }) {
       axios
         .get('/api/lists/')

@@ -8,9 +8,10 @@ import * as axios from 'axios'
 
 Vue.use(Vuetify)
 
-const token = localStorage.getItem('user-token')
+const token = localStorage.getItem('JWT')
 if (token) {
-  axios.defaults.headers.common['authorization'] = token
+  console.log('QQQQQtoken = ' + token)
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('JWT')
 }
 
 Vue.config.productionTip = false

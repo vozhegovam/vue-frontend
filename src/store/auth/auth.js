@@ -2,13 +2,15 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import * as router from 'vue-router'
 
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 
 export default {
   state: {
-    token: localStorage.getItem('JWT') || '',
+    token: localStorage.getItem('JWT'),
+    username: localStorage.getItem('username'),
     status: '',
     hasLoadedOnce: false,
     userRole: null
@@ -17,49 +19,43 @@ export default {
     AUTH_REQUEST (state) {
       state.status = 'loading'
     },
-    AUTH_SUCCESS (state, resp, userData) {
+    AUTH_SUCCESS: (state, resp) => {
       state.status = 'success'
       state.token = resp.data.token
       localStorage.setItem('JWT', resp.data.token)
-      localStorage.setItem('username', userData.email)
-      state.hasLoadedOnce = true
-      state.userRole = resp.role
+      localStorage.setItem('username', resp.headers.username)
     },
     AUTH_ERROR (state) {
       state.status = 'error'
       state.hasLoadedOnce = true
     },
     AUTH_LOGOUT (state) {
-      state.token = ''
+      // state.token = null
     }
   },
   actions: {
     AUTH_REQUEST: function ({commit, dispatch}, {userData}) {
-      console.log('userData : ' + userData)
       axios.post('/api/login', userData).then((response) => {
-        console.log('response : ' + JSON.stringify(response))
-        commit('AUTH_SUCCESS', response, userData)
+        commit('AUTH_SUCCESS', response)
         dispatch('AUTH_REQUEST')
-        // resolve(response)
       }).catch(err => {
         commit('AUTH_ERROR', err)
-        localStorage.removeItem('user-token')
-        // reject(err)
+        // localStorage.removeItem('JWT')
       })
     },
     AUTH_LOGOUT: function ({commit, dispatch}) {
       return new Promise((resolve, reject) => {
         commit('AUTH_LOGOUT')
-        localStorage.removeItem('user-token')
-        resolve()
+        localStorage.removeItem('username')
+        localStorage.removeItem('JWT')
+        // resolve()
       })
     }
   },
 
   getters: {
-    isAuth: state => {
-      return !!state.token
-    },
-    authStatus: state => state.status
+    getCurrentUserName: state => {
+      return state.username
+    }
   }
 }

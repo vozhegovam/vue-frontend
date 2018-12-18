@@ -101,7 +101,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Добавить' : 'Редактировать'
+        return this.editedIndex === -1 ? 'Добавить фирму' : 'Редактировать'
       }
     },
 
