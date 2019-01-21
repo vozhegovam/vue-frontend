@@ -13,11 +13,20 @@ export default {
     username: localStorage.getItem('username'),
     status: '',
     hasLoadedOnce: false,
-    userRole: null
+    userRole: null,
+    isAdmin: false
   },
   mutations: {
     AUTH_REQUEST (state) {
       state.status = 'loading'
+    },
+    AUTH_CHECK_SUCCESS (state) {
+      console.log('isAdmin = true')
+      state.isAdmin = true
+    },
+    AUTH_CHECK_FAIL (state) {
+      console.log('isAdmin = false')
+      state.isAdmin = false
     },
     AUTH_SUCCESS: (state, resp) => {
       state.status = 'success'
@@ -37,10 +46,15 @@ export default {
     AUTH_REQUEST: function ({commit, dispatch}, {userData}) {
       axios.post('/api/login', userData).then((response) => {
         commit('AUTH_SUCCESS', response)
+        axios.post('/api/check', userData).then((response) => {
+          commit('AUTH_CHECK_SUCCESS', response)
+        }).catch(err => {
+          console.log(err)
+          commit('AUTH_CHECK_FAIL', response)
+        })
         dispatch('AUTH_REQUEST')
       }).catch(err => {
         commit('AUTH_ERROR', err)
-        // localStorage.removeItem('JWT')
       })
     },
     AUTH_LOGOUT: function ({commit, dispatch}) {

@@ -28,12 +28,13 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
+            <a :href="'/reg'">Зарегистрироваться</a>
             <v-spacer></v-spacer>
             <v-btn
               color="primary"
               @click="onSubmit"
               :disabled="!valid"
-            >Login</v-btn>
+            >Войти</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -72,6 +73,7 @@
             .then(() => {
               this.$router.push('/')
             })
+            .catch(err => console.log(err.message))
         }
       }
     }

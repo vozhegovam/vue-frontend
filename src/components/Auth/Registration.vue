@@ -42,7 +42,7 @@
               color="primary"
               @click="onSubmit()"
               :disabled="!valid"
-            >Create account!</v-btn>
+            >Создать пользователя</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -69,16 +69,16 @@
         confirmPassword: '',
         valid: false,
         emailRules: [
-          v => !!v || 'E-mail is required',
-          v => emailRegex.test(v) || 'E-mail must be valid'
+          v => !!v || 'E-mail должен быть заполнен',
+          v => emailRegex.test(v) || 'неверный E-mail'
         ],
         passwordRules: [
-          v => !!v || 'Password is required',
-          v => (v && v.length >= 6) || 'Password must be equal or more than 6 characters'
+          v => !!v || 'Пароль не заполнен',
+          v => (v && v.length >= 6) || 'Пароль должен быть больше 6 символов'
         ],
         confirmPasswordRules: [
-          v => !!v || 'Password is required',
-          v => v === this.password || 'Password should match'
+          v => !!v || 'Пароль не заполнен',
+          v => v === this.password || 'Пароли должны совпадать'
         ]
       }
     },
@@ -89,6 +89,8 @@
           this.newUser.password = this.password
           console.log(this.newUser)
           this.$store.dispatch('REG_REQUEST', { newUser: this.newUser })
+            .then(() => this.$router.push('/log'))
+            .catch(err => console.log(err.message))
         }
       }
     }

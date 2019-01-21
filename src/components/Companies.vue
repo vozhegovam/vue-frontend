@@ -13,7 +13,7 @@
                 <v-text-field v-model="editedItem.name" label="Название"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.description" label="Описание"></v-text-field>
+                <v-text-field v-model="editedItem.description" label="Заметки"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-select

@@ -56,7 +56,7 @@
         <v-btn v-if="!isAuth" icon :to="'/log'">
           <v-icon>lock</v-icon>
         </v-btn>
-        <p class="text-sm-center">{{getCurUserName}}</p>
+        <!--<p class="text-sm-center">{{getCurUserName}}</p>-->
         <div v-if="isAuth">
           <v-btn icon @click="logoutFrom()">
             <v-icon>lock_open</v-icon>

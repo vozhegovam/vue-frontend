@@ -76,8 +76,7 @@ export default new Router({
     {
       path: '/reg',
       name: 'Registration',
-      component: Registration,
-      beforeEnter: ifAuthenticated
+      component: Registration
     },
     {
       path: '/templates',

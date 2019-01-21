@@ -9,17 +9,17 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
+              <!--<v-flex xs12 sm6 md4>-->
+                <!--<v-text-field v-model="editedItem.name" label="Имя"></v-text-field>-->
+              <!--</v-flex>-->
+              <!--<v-flex xs12 sm6 md4>-->
+                <!--<v-text-field v-model="editedItem.login" label="Логин"></v-text-field>-->
+              <!--</v-flex>-->
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.name" label="Имя"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.login" label="Логин"></v-text-field>
+                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.password" label="Пароль"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.email" label="Почта"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-select
@@ -46,10 +46,10 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.login }}</td>
-        <td class="text-xs-right">{{ props.item.password }}</td>
+        <!--<td>{{ props.item.name }}</td>-->
+        <!--<td class="text-xs-right">{{ props.item.login }}</td>-->
         <td class="text-xs-right">{{ props.item.email }}</td>
+        <td class="text-xs-right">{{ props.item.password }}</td>
         <td class="text-xs-right">{{ props.item.role }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
@@ -69,10 +69,10 @@
     data: () => ({
       dialog: false,
       headers: [
-        { text: 'Пользователь', align: 'left', value: 'name' },
-        { text: 'Логин', value: 'login' },
-        { text: 'Пароль', value: 'password' },
+        // { text: 'Пользователь', align: 'left', value: 'name' },
+        // { text: 'Логин', value: 'login' },
         { text: 'Email', value: 'email' },
+        { text: 'Пароль', value: 'password' },
         { text: 'Роль', value: 'role' }
       ],
       roles: [
@@ -126,6 +126,7 @@
 
       editItem (item) {
         this.editedItem = Object.assign({}, item)
+        this.editedItem.password = ''
         this.dialog = true
       },
 
