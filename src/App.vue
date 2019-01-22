@@ -2,6 +2,7 @@
   <div id="app">
     <v-app id="inspire">
       <v-navigation-drawer
+        v-if="isAuth"
         fixed
         :clipped="$vuetify.breakpoint.mdAndUp"
         app
@@ -21,7 +22,7 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-list-group
-            v-if="isAuth"
+            v-if="isAuth && isAdmin"
             prepend-icon="account_circle"
             value="true"
           >
@@ -89,8 +90,10 @@
     },
     computed: {
       isAuth () {
-        const token = localStorage.getItem('JWT')
-        return (token !== null)
+        return this.$store.getters.isTokenPresented
+      },
+      isAdmin () {
+        return this.$store.getters.isAdmin
       },
       getCurUserName () {
         return this.$store.getters.getCurrentUserName

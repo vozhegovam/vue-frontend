@@ -30,6 +30,15 @@ const ifAuthenticated = (to, from, next) => {
     next('/log')
   }
 }
+const ifAdminAuthenticated = (to, from, next) => {
+  const token = localStorage.getItem('JWT')
+  const isAdmin = localStorage.getItem('isAdmin')
+  if (token !== null && isAdmin === 'true') {
+    next()
+  } else {
+    next('/log')
+  }
+}
 
 // const ifNotAuthenticated = (to, from, next) => {
 //   if (!store.getters.isAuthenticated) {
@@ -53,7 +62,7 @@ export default new Router({
       path: '/users',
       name: 'Users',
       component: Users,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifAdminAuthenticated
     },
     {
       path: '/',

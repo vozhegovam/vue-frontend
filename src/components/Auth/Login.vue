@@ -15,6 +15,7 @@
                 type="email"
                 v-model="email"
                 :rules="emailRules"
+                autocomplete="foo"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
@@ -24,6 +25,7 @@
                 :counter="6"
                 v-model="password"
                 :rules="passwordRules"
+                autocomplete="foo"
               ></v-text-field>
             </v-form>
           </v-card-text>

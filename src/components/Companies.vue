@@ -17,6 +17,7 @@
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-select
+                  v-if="hasAccess"
                   :items="this.$store.getters.getUsersAsList"
                   v-model="editedItem.user"
                   label="Пользователь"
@@ -50,7 +51,7 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-left"><a v-bind:href="'/company/' + props.item.id">{{ props.item.name }}</a></td>
         <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="text-xs-left">{{ getUserByValue(props.item.user) }}</td>
+        <td v-if="hasAccess" class="text-xs-left">{{ getUserByValue(props.item.user) }}</td>
         <td class="text-xs-left">{{ getListValueByValue(props.item.checked)}}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
@@ -70,10 +71,10 @@
     data: () => ({
       dialog: false,
       headers: [
-        { text: 'Имя', align: 'left', value: 'name' },
-        { text: 'Описание', value: 'description' },
-        { text: 'Пользователь', value: 'user' },
-        { text: 'Проверка пройдена', value: 'checked' }
+        { text: 'Имя', align: 'left', value: 'name', isAdmin: false },
+        { text: 'Описание', value: 'description', isAdmin: false },
+        { text: 'Пользователь', value: 'user', isAdmin: true },
+        { text: 'Проверка пройдена', value: 'checked', isAdmin: false }
       ],
       corps: [
       ],
@@ -102,6 +103,17 @@
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'Добавить фирму' : 'Редактировать'
+      },
+      hasAccess () {
+        return localStorage.getItem('isAdmin') === 'true'
+         // this.$store.getters.isAdmin()
+      },
+      getHeaders () {
+        if (this.hasAccess) {
+          return this.headers.filter(r => !r.isAdmin)
+        } else {
+          return this.headers
+        }
       }
     },
 
@@ -112,12 +124,13 @@
     },
 
     created () {
-      this.$store.dispatch('LOAD_USERS')
+      if (this.hasAccess) {
+        this.$store.dispatch('LOAD_USERS')
+      }
       this.$store.dispatch('LOAD_COMPANIES')
     },
 
     methods: {
-
       createUpdateCompany (company) {
         if (company.id === null) {
           company.checked = false
@@ -152,7 +165,7 @@
         }
       },
       getUserByValue (id) {
-        if (id === null) {
+        if (id === null || !this.hasAccess) {
           return null
         }
         return this.$store.getters.getUsers.find(item => { return item.id === id }).name
