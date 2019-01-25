@@ -33,11 +33,17 @@ export default {
   },
   actions: {
     LOAD_COMPANIES: function ({ commit }) {
+      commit('clearError')
+      commit('setLoading', true)
       axios
         .get('/api/companies/')
         .then(r => r.data)
         .then(companies => {
           commit('LOAD_COMPANIES', companies)
+          commit('setLoading', false)
+        }).catch((error) => {
+          commit('setLoading', false)
+          commit('setError', error.message)
         })
     },
     LOAD_COMPANY: function ({ commit }, { companyId }) {
@@ -46,30 +52,49 @@ export default {
         .then(r => r.data)
         .then(company => {
           commit('LOAD_COMPANY', company)
+        }).catch((error) => {
+          commit('setError', error.message)
         })
     },
-    ADD_NEW_COMPANY: function ({ commit, state }, { company }) {
-      axios.post('/api/companies/add', company).then((response) => {
+    async ADD_NEW_COMPANY ({ commit, state }, { company }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.post('/api/companies/add', company)
         commit('ADD_COMPANY', { company: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    UPDATE_COMPANY: function ({ commit, state }, { company }) {
-      axios.put('/api/companies/' + company.id, company).then((response) => {
+    async UPDATE_COMPANY ({ commit, state }, { company }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.put('/api/companies/' + company.id, company)
         commit('UPDATE_COMPANY', { company: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    REMOVE_COMPANY: function ({ commit, state }, { company }) {
-      axios.delete('/api/companies/' + company.id).then(() => {
+    async REMOVE_COMPANY ({ commit, state }, { company }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        await axios.delete('/api/companies/' + company.id)
         commit('REMOVE_COMPANY', { company })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
-
   },
 
   getters: {

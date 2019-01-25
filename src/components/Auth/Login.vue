@@ -35,7 +35,8 @@
             <v-btn
               color="primary"
               @click="onSubmit"
-              :disabled="!valid"
+              :loading="loading"
+              :disabled="!valid || loading"
             >Войти</v-btn>
           </v-card-actions>
         </v-card>
@@ -59,8 +60,13 @@
         ],
         passwordRules: [
           v => !!v || 'Введите пароль',
-          v => (v && v.length >= 2) || 'Пароль должен быть больше 3 символов'
+          v => (v && v.length >= 6) || 'Пароль должен быть больше 6 символов'
         ]
+      }
+    },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
       }
     },
     methods: {
@@ -70,12 +76,11 @@
             username: this.email,
             password: this.password
           }
-          console.log(userData)
-          this.$store.dispatch('AUTH_REQUEST', { userData: userData })
+          this.$store.dispatch('LOGIN_USER', { userData: userData })
             .then(() => {
               this.$router.push('/')
             })
-            .catch(err => console.log(err.message))
+            .catch(() => {})
         }
       }
     }

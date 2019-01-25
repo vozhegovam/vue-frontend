@@ -93,16 +93,15 @@
         return this.$store.getters.isTokenPresented
       },
       isAdmin () {
-        return this.$store.getters.isAdmin
-      },
-      getCurUserName () {
-        return this.$store.getters.getCurrentUserName
+        return this.$store.getters.isUserAdmin
       }
     },
     methods: {
       logoutFrom () {
-        this.$store.dispatch('AUTH_LOGOUT')
-        this.$router.push('/log')
+        this.$store.dispatch('AUTH_LOGOUT').then(() => {
+          this.$router.push('/log')
+        })
+        .catch(() => {})
       }
     }
   }

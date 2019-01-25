@@ -1,11 +1,15 @@
 export default {
   state: {
     loading: false,
+    fileLoading: false,
     error: null
   },
   mutations: {
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setFileLoading (state, payload) {
+      state.fileLoading = payload
     },
     setError (state, payload) {
       state.error = payload
@@ -18,6 +22,9 @@ export default {
     setLoading ({commit}, payload) {
       commit('setLoading', payload)
     },
+    setFileLoading ({commit}, payload) {
+      commit('setFileLoading', payload)
+    },
     setError ({commit}, payload) {
       commit('setError', payload)
     },
@@ -27,6 +34,9 @@ export default {
   },
   getters: {
     loading (state) {
+      return state.loading
+    },
+    fileLoading (state) {
       return state.loading
     },
     error (state) {

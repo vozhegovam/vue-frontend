@@ -9,52 +9,36 @@ import PointExemplars from '@/components/PointExemplars'
 import Report from '@/components/Report'
 import Login from '@/components/Auth/Login'
 import Registration from '@/components/Auth/Registration'
-// import store from '../store'
-// import auth from '../store/auth/auth'
+import store from '../store'
 
 Vue.use(Router)
 
 const hasToken = (to, from, next) => {
-  const token = localStorage.getItem('JWT')
-  if (token !== null) {
+  const isToken = store.getters.isTokenPresented
+  if (isToken) {
     next('/')
   } else {
     next()
   }
 }
 const ifAuthenticated = (to, from, next) => {
-  const token = localStorage.getItem('JWT')
-  if (token !== null) {
+  const isToken = store.getters.isTokenPresented
+  if (isToken) {
     next()
   } else {
     next('/log')
   }
 }
 const ifAdminAuthenticated = (to, from, next) => {
-  const token = localStorage.getItem('JWT')
-  const isAdmin = localStorage.getItem('isAdmin')
-  if (token !== null && isAdmin === 'true') {
+  const isToken = store.getters.isTokenPresented
+  const isAdmin = store.getters.isUserAdmin
+    // localStorage.getItem('isAdmin').role === 'Администратор'
+  if (isToken && isAdmin) {
     next()
   } else {
     next('/log')
   }
 }
-
-// const ifNotAuthenticated = (to, from, next) => {
-//   if (!store.getters.isAuthenticated) {
-//     next()
-//     return
-//   }
-//   next('/')
-// }
-//
-// const ifAuthenticated = (to, from, next) => {
-//   if (store.getters.isAuthenticated) {
-//     next()
-//     return
-//   }
-//   next('/log')
-// }
 
 export default new Router({
   routes: [

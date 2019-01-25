@@ -41,7 +41,8 @@
             <v-btn
               color="primary"
               @click="onSubmit()"
-              :disabled="!valid"
+              :loading="loading"
+              :disabled="!valid || loading"
             >Создать пользователя</v-btn>
           </v-card-actions>
         </v-card>
@@ -82,15 +83,21 @@
         ]
       }
     },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      }
+    },
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
           this.newUser.email = this.email
           this.newUser.password = this.password
-          console.log(this.newUser)
           this.$store.dispatch('REG_REQUEST', { newUser: this.newUser })
-            .then(() => this.$router.push('/log'))
-            .catch(err => console.log(err.message))
+            .then(() => {
+              this.$router.push('/log')
+            })
+            .catch(() => {})
         }
       }
     }

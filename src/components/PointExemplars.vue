@@ -9,6 +9,7 @@
     >
       Лист заполнен. Вернуться к списку листов?
       <v-btn
+        v-if="listExemplarWithTemplate !== null"
         color="teal darken-4"
         flat
         :href="'/company/' + listExemplarWithTemplate.companyId"

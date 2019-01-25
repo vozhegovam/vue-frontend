@@ -24,37 +24,57 @@ export default {
     }
   },
   actions: {
-    LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY: function ({ commit, state }, { companyId }) {
-      axios
-        .get('/api/lists_with_template/parent_id=' + companyId)
-        .then(r => r.data)
-        .then(listExemplarsWithTemplate => {
-          commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', listExemplarsWithTemplate)
-        })
+    async LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY ({ commit, state }, { companyId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists_with_template/parent_id=' + companyId)
+        commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID: function ({ commit, state }, { listId }) {
-      axios
-        .get('/api/lists_with_template/' + listId)
-        .then(r => r.data)
-        .then(listExemplarWithTemplate => {
-          commit('LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID', listExemplarWithTemplate)
-        })
+    async LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID ({ commit, state }, { listId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists_with_template/' + listId)
+        commit('LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY_ID_FOR_REPORT: function ({ commit, state }, { companyId }) {
-      axios
-        .get('/api/lists_with_template/report/' + companyId)
-        .then(r => r.data)
-        .then(listExemplarsWithTemplate => {
-          commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', listExemplarsWithTemplate)
-        })
+    async LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY_ID_FOR_REPORT ({ commit, state }, { companyId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists_with_template/report/' + companyId)
+        commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    LOAD_REPORT: function ({ commit, state }, { companyId }) {
-      axios
-        .get('/api/lists_with_template/new_report/' + companyId)
-        .then(r => r.data)
-        .then(reportPath => {
-          commit('LOAD_REPORT', reportPath)
-        })
+    async LOAD_REPORT ({ commit, state }, { companyId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists_with_template/new_report/' + companyId)
+        commit('LOAD_REPORT', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
   },
   getters: {

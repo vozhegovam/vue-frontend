@@ -23,43 +23,70 @@ export default {
     }
   },
   actions: {
-    MIGRATE_LIST_TEMPLATES: function ({ commit }) {
-      axios
-        .get('/api/lists/update')
-        .then(r => r.data)
-        .then(lists => {
-          commit('LOAD_LIST_TEMPLATES', lists)
-        })
+    async MIGRATE_LIST_TEMPLATES ({ commit }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists/update')
+        commit('LOAD_LIST_TEMPLATES', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    LOAD_LIST_TEMPLATES: function ({ commit }) {
-      axios
-        .get('/api/lists/')
-        .then(r => r.data)
-        .then(lists => {
-          commit('LOAD_LIST_TEMPLATES', lists)
-        })
+    async LOAD_LIST_TEMPLATES ({ commit }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists/')
+        commit('LOAD_LIST_TEMPLATES', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    LOAD_LIST_TEMPLATE: function ({ commit }, {listId}) {
-      axios
-        .get('/api/lists/' + listId)
-        .then(r => r.data)
-        .then(list => {
-          commit('LOAD_LIST_TEMPLATE', list)
-        })
+    async LOAD_LIST_TEMPLATE ({ commit }, {listId}) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/lists/' + listId)
+        commit('LOAD_LIST_TEMPLATE', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    UPDATE_LIST_TEMPLATE: function ({ commit, state }, { listTemplate }) {
-      axios.put('/api/lists/' + listTemplate.id, listTemplate).then((response) => {
+    async UPDATE_LIST_TEMPLATE ({ commit, state }, { listTemplate }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.put('/api/lists/' + listTemplate.id, listTemplate)
         commit('UPDATE_LIST_TEMPLATE', { listTemplate: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    REMOVE_LIST_TEMPLATE: function ({ commit, state }, { listTemplate }) {
-      axios.delete('/api/lists/' + listTemplate.id).then(() => {
+    async REMOVE_LIST_TEMPLATE ({ commit, state }, { listTemplate }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        await axios.delete('/api/lists/' + listTemplate.id)
         commit('REMOVE_LIST_TEMPLATE', { listTemplate })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
   },
   getters: {

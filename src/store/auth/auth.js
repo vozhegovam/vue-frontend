@@ -10,71 +10,72 @@ Vue.use(VueAxios, axios)
 export default {
   state: {
     token: localStorage.getItem('JWT'),
-    status: '',
-    hasLoadedOnce: false,
-    userRole: null,
-    currentUser: null,
-    isAdmin: localStorage.getItem('isAdmin')
+    curUserId: localStorage.getItem('cur-uid'),
+    curUserName: localStorage.getItem('cur-uname'),
+    curUserRole: localStorage.getItem('cur-urole')
   },
   mutations: {
-    AUTH_REQUEST (state) {
-      state.status = 'loading'
-    },
-    AUTH_CHECK_SUCCESS (state) {
-      console.log('isAdmin = true')
-      localStorage.setItem('isAdmin', true)
-    },
-    AUTH_CHECK_FAIL (state) {
-      console.log('isAdmin = false')
-      localStorage.setItem('isAdmin', false)
-    },
     AUTH_SUCCESS: (state, resp) => {
-      state.status = 'success'
       state.token = resp.data.token
-      localStorage.setItem('JWT', resp.data.token)
+      state.currentUser = resp.data.user
+      state.curUserRole = resp.data.user.role
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + resp.data.token
     },
-    AUTH_ERROR (state) {
-      state.status = 'error'
-      state.hasLoadedOnce = true
-    },
-    AUTH_LOGOUT (state) {
-      // state.token = null
+    AUTH_ERROR: (state) => {
+      localStorage.removeItem('JWT')
+      localStorage.removeItem('cur-uid')
+      localStorage.removeItem('cur-uname')
+      localStorage.removeItem('cur-urole')
+      state.token = null
+      state.curUserId = null
+      state.curUserName = null
+      state.curUserRole = null
+      delete axios.defaults.headers.common['Authorization']
     }
   },
   actions: {
-    AUTH_REQUEST: function ({commit, dispatch}, {userData}) {
-      axios.post('/api/login', userData).then((response) => {
-        console.log('RESPONSE : ' + JSON.stringify(response))
+    async LOGIN_USER ({commit, dispatch}, {userData}) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.post('/api/login', userData)
+        localStorage.setItem('JWT', response.data.token)
+        localStorage.setItem('cur-uid', response.data.user.id)
+        localStorage.setItem('cur-uname', response.data.user.name)
+        localStorage.setItem('cur-urole', response.data.user.role)
+        commit('setLoading', false)
         commit('AUTH_SUCCESS', response)
-        // axios.post('/api/check', userData).then((response) => {
-        //   console.log('RESPONSE : ' + JSON.stringify(response.data))
-        //   commit('AUTH_CHECK_SUCCESS', response)
-        // }).catch(err => {
-        //   console.log(err)
-        //   commit('AUTH_CHECK_FAIL', response)
-        // })
-        dispatch('AUTH_REQUEST')
-      }).catch(err => {
-        commit('AUTH_ERROR', err)
-      })
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    AUTH_LOGOUT: function ({commit, dispatch}) {
-      return new Promise((resolve, reject) => {
-        commit('AUTH_LOGOUT')
-        localStorage.removeItem('JWT')
-      })
+    async AUTH_LOGOUT ({commit, dispatch}) {
+      try {
+        await axios.get('/api/logout')
+        commit('AUTH_ERROR')
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
   },
 
   getters: {
-    getCurrentUser: state => {
-      return state.currentUser
+    getCurrentUserId: state => {
+      return state.curUserId
+    },
+    getToken: state => {
+      return state.token
     },
     isTokenPresented: state => {
-      return state.token !== null
+      return state.token !== null && state.token !== undefined
     },
-    isAdmin: state => {
-      return state.isAdmin === 'true'
+    isUserAdmin: state => {
+      return state.curUserRole === 'Администратор'
     }
   }
 }

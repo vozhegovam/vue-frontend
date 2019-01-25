@@ -13,7 +13,7 @@
         </v-breadcrumbs>
       </v-flex>
       <v-flex xs3>
-        <v-btn small block color="primary" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
+        <v-btn small block color="primary" :loading="fileLoading" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
       </v-flex>
     </v-layout>
     <div v-for="list in listExemplarsWithTemplate">
@@ -96,6 +96,9 @@
       },
       companyById () {
         return this.$store.getters.getCompany
+      },
+      fileLoading () {
+        return this.$store.getters.fileLoading
       }
     },
     methods: {

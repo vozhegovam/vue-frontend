@@ -47,27 +47,44 @@ export default {
     }
   },
   actions: {
-    LOAD_POINT_TEMPLATES: function ({ commit, state }, { listId }) {
-      axios
-        .get('/api/points/' + listId)
-        .then(r => r.data)
-        .then(points => {
-          commit('LOAD_POINT_TEMPLATES', points)
-        })
+    async LOAD_POINT_TEMPLATES ({ commit, state }, { listId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/points/' + listId)
+        commit('LOAD_POINT_TEMPLATES', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    UPDATE_POINT: function ({ commit, state }, { pointTemplate }) {
-      axios.put('/api/points/' + pointTemplate.id, pointTemplate).then((response) => {
+    async UPDATE_POINT ({ commit, state }, { pointTemplate }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        await axios.put('/api/points/' + pointTemplate.id, pointTemplate)
         commit('UPDATE_POINT', pointTemplate)
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    REMOVE_POINT: function ({ commit, state }, { pointTemplate }) {
-      axios.delete('/api/points/' + pointTemplate.id).then(() => {
+    async REMOVE_POINT ({ commit, state }, { pointTemplate }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        await axios.delete('/api/points/' + pointTemplate.id)
         commit('REMOVE_POINT', pointTemplate)
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
   },
   getters: {

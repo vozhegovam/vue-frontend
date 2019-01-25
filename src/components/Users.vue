@@ -42,15 +42,17 @@
     <v-data-table
       :headers="headers"
       :items="this.$store.getters.getUsers"
+      :loading="loading"
       hide-actions
       class="elevation-1"
     >
+      <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
       <template slot="items" slot-scope="props">
         <!--<td>{{ props.item.name }}</td>-->
         <!--<td class="text-xs-right">{{ props.item.login }}</td>-->
-        <td class="text-xs-right">{{ props.item.email }}</td>
-        <td class="text-xs-right">{{ props.item.password }}</td>
-        <td class="text-xs-right">{{ props.item.role }}</td>
+        <td class="text-xs-left">{{ props.item.email }}</td>
+        <td class="text-xs-left">{{ props.item.password }}</td>
+        <td class="text-xs-left">{{ props.item.role }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -71,9 +73,9 @@
       headers: [
         // { text: 'Пользователь', align: 'left', value: 'name' },
         // { text: 'Логин', value: 'login' },
-        { text: 'Email', value: 'email' },
-        { text: 'Пароль', value: 'password' },
-        { text: 'Роль', value: 'role' }
+        { text: 'Email', align: 'left', value: 'email' },
+        { text: 'Пароль', align: 'left', value: 'password' },
+        { text: 'Роль', align: 'left', value: 'role' }
       ],
       roles: [
         { text: 'Администратор' },
@@ -101,6 +103,9 @@
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'Создать' : 'Редактировать'
+      },
+      loading () {
+        return this.$store.getters.loading
       }
     },
 

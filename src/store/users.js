@@ -29,34 +29,57 @@ export default {
     }
   },
   actions: {
-    LOAD_USERS: function ({ commit, state }) {
-      axios
-        .get('/api/users/')
-        .then(r => r.data)
-        .then(users => {
-          commit('LOAD_USERS', users)
-        })
+    async LOAD_USERS ({ commit, state }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/users/')
+        commit('LOAD_USERS', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    ADD_NEW_USER: function ({ commit, state }, { user }) {
-      axios.post('/api/users/add', user).then((response) => {
+    async ADD_NEW_USER ({ commit, state }, { user }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.post('/api/users/add', user)
         commit('ADD_USER', { user: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    UPDATE_USER: function ({ commit, state }, { user }) {
-      axios.put('/api/users/' + user.id, user).then((response) => {
+    async UPDATE_USER ({ commit, state }, { user }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.put('/api/users/' + user.id, user)
         commit('UPDATE_USER', { user: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    REMOVE_USER: function ({ commit, state }, { user }) {
-      axios.delete('/api/users/' + user.id).then(() => {
+    async REMOVE_USER ({ commit, state }, { user }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        await axios.delete('/api/users/' + user.id)
         commit('REMOVE_USER', { user })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
 
   },

@@ -10,7 +10,6 @@ Vue.use(Vuetify)
 
 const token = localStorage.getItem('JWT')
 if (token) {
-  console.log('QQQQQtoken = ' + token)
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('JWT')
 }
 

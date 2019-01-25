@@ -28,42 +28,70 @@ export default {
     }
   },
   actions: {
-    LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY: function ({ commit, state }, { companyId, listTemplateId }) {
-      axios
-        .get('/api/list_ex/all/' + companyId + '/' + listTemplateId)
-        .then(r => r.data)
-        .then(listExemplars => {
-          commit('LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY', listExemplars)
-        })
+    async LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY ({ commit, state }, { companyId, listTemplateId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/list_ex/all/' + companyId + '/' + listTemplateId)
+        commit('LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    LOAD_LIST_EXEMPLARS_BY_COMPANY: function ({ commit, state }, { companyId }) {
-      axios
-        .get('/api/list_ex/company_id=' + companyId)
-        .then(r => r.data)
-        .then(listExemplars => {
-          commit('LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY', listExemplars)
-        })
+    async LOAD_LIST_EXEMPLARS_BY_COMPANY ({ commit, state }, { companyId }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.get('/api/list_ex/company_id=' + companyId)
+        commit('LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY', response.data)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    ADD_NEW_LIST_EXEMPLAR: function ({ commit, state }, { listExemplar }) {
-      axios.post('/api/list_ex/add', listExemplar).then((response) => {
+    async ADD_NEW_LIST_EXEMPLAR ({ commit, state }, { listExemplar }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.post('/api/list_ex/add', listExemplar)
         commit('ADD_LIST_EXEMPLAR', { listExemplar: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    UPDATE_LIST_EXEMPLAR: function ({ commit, state }, { listExemplar }) {
-      axios.put('/api/list_ex/' + listExemplar.id, listExemplar).then((response) => {
+    async UPDATE_LIST_EXEMPLAR ({ commit, state }, { listExemplar }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const response = await axios.put('/api/list_ex/' + listExemplar.id, listExemplar)
         commit('UPDATE_LIST_EXEMPLAR', { listExemplar: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     },
-    REMOVE_LIST_EXEMPLAR: function ({ commit, state }, { listExemplar }) {
-      axios.delete('/api/list_ex/' + listExemplar.id).then(() => {
+    async REMOVE_LIST_EXEMPLAR ({ commit, state }, { listExemplar }) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        await axios.delete('/api/list_ex/' + listExemplar.id)
         commit('REMOVE_LIST_EXEMPLAR', { listExemplar })
-      }, (err) => {
-        console.log(err)
-      })
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
     }
 
   },

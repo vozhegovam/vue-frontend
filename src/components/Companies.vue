@@ -43,11 +43,13 @@
       </v-card>
     </v-dialog>
     <v-data-table
-      :headers="headers"
+      :headers="getHeaders"
       :items="this.$store.getters.getCompanies"
       hide-actions
+      :loading="loading"
       class="elevation-1"
     >
+      <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
       <template slot="items" slot-scope="props">
         <td class="text-xs-left"><a v-bind:href="'/company/' + props.item.id">{{ props.item.name }}</a></td>
         <td class="text-xs-left">{{ props.item.description }}</td>
@@ -72,9 +74,9 @@
       dialog: false,
       headers: [
         { text: 'Имя', align: 'left', value: 'name', isAdmin: false },
-        { text: 'Описание', value: 'description', isAdmin: false },
-        { text: 'Пользователь', value: 'user', isAdmin: true },
-        { text: 'Проверка пройдена', value: 'checked', isAdmin: false }
+        { text: 'Описание', align: 'left', value: 'description', isAdmin: false },
+        { text: 'Пользователь', align: 'left', value: 'user', isAdmin: true },
+        { text: 'Проверка пройдена', align: 'left', value: 'checked', isAdmin: false }
       ],
       corps: [
       ],
@@ -105,15 +107,17 @@
         return this.editedIndex === -1 ? 'Добавить фирму' : 'Редактировать'
       },
       hasAccess () {
-        return localStorage.getItem('isAdmin') === 'true'
-         // this.$store.getters.isAdmin()
+        return this.$store.getters.isUserAdmin
       },
       getHeaders () {
-        if (this.hasAccess) {
+        if (!this.hasAccess) {
           return this.headers.filter(r => !r.isAdmin)
         } else {
           return this.headers
         }
+      },
+      loading () {
+        return this.$store.getters.loading
       }
     },
 
@@ -132,6 +136,10 @@
 
     methods: {
       createUpdateCompany (company) {
+        if (!this.hasAccess) {
+          company.user = this.$store.getters.getCurrentUserId
+        }
+
         if (company.id === null) {
           company.checked = false
           this.$store.dispatch('ADD_NEW_COMPANY', { company: company })
@@ -165,7 +173,7 @@
         }
       },
       getUserByValue (id) {
-        if (id === null || !this.hasAccess) {
+        if (id === null || !this.hasAccess || !this.$store.getters.isTokenPresented) {
           return null
         }
         return this.$store.getters.getUsers.find(item => { return item.id === id }).name
