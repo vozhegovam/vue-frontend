@@ -90,7 +90,7 @@ export default {
     },
     getUsersAsList: state => {
       state.users.forEach(function (item, i, arr) {
-        state.userList.push({text: item.name, value: item.id})
+        state.userList.push({text: item.email, value: item.id})
       })
       return state.userList
     },

@@ -15,7 +15,7 @@
       </div>
     </template>
     <template v-if="!loading">
-      <v-btn small color="info" @click="migrateUpdateUser()">Мигрировать из файла</v-btn>
+      <v-btn small color="info" @click="migrateUpdateList()">Мигрировать из файла</v-btn>
       <div>
         <v-dialog v-model="dialog" max-width="500px">
           <v-card>
@@ -37,7 +37,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
-              <v-btn color="blue darken-1" flat @click.native="createUpdateUser(editedItem)">Сохранить</v-btn>
+              <v-btn color="blue darken-1" flat @click.native="createUpdateList(editedItem)">Сохранить</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -57,6 +57,8 @@
                     </v-flex>
                     <v-flex xs2>
                       <v-btn icon class="mx-0" @click="editItem(item)">
+                        <!--:loading="updateloading && editedItem.id === item.id"-->
+                        <!--:disabled="updateloading && editedItem.id === item.id"-->
                         <v-icon color="teal">edit</v-icon>
                       </v-btn>
                       <v-btn icon class="mx-0" @click="deleteItem(item)">
@@ -98,14 +100,14 @@
     }),
     components: {VListTileAction},
     methods: {
-      createUpdateUser (listTemplate) {
+      createUpdateList (listTemplate) {
         if (listTemplate.id !== null) {
           this.$store.dispatch('UPDATE_LIST_TEMPLATE', { listTemplate: listTemplate })
         }
         this.close()
       },
 
-      migrateUpdateUser () {
+      migrateUpdateList () {
         this.$store.dispatch('MIGRATE_LIST_TEMPLATES')
       },
 
@@ -134,6 +136,9 @@
       },
       loading () {
         return this.$store.getters.loading
+      },
+      updateloading () {
+        return this.$store.getters.updateLoading
       }
     }
   }

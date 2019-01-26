@@ -57,7 +57,7 @@
         <v-btn v-if="!isAuth" icon :to="'/log'">
           <v-icon>lock</v-icon>
         </v-btn>
-        <!--<p class="text-sm-center">{{getCurUserName}}</p>-->
+        <p v-if="isAuth" class="text-sm-center">{{getCurrentUserName}}</p>
         <div v-if="isAuth">
           <v-btn icon @click="logoutFrom()">
             <v-icon>lock_open</v-icon>
@@ -94,6 +94,9 @@
       },
       isAdmin () {
         return this.$store.getters.isUserAdmin
+      },
+      getCurrentUserName () {
+        return this.$store.getters.getCurrentUserName
       }
     },
     methods: {
@@ -101,7 +104,9 @@
         this.$store.dispatch('AUTH_LOGOUT').then(() => {
           this.$router.push('/log')
         })
-        .catch(() => {})
+        .catch(() => {
+          this.$router.push('/log')
+        })
       }
     }
   }

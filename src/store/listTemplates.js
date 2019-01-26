@@ -64,13 +64,13 @@ export default {
     },
     async UPDATE_LIST_TEMPLATE ({ commit, state }, { listTemplate }) {
       commit('clearError')
-      commit('setLoading', true)
+      commit('setUpdateLoading', true)
       try {
         const response = await axios.put('/api/lists/' + listTemplate.id, listTemplate)
         commit('UPDATE_LIST_TEMPLATE', { listTemplate: response.data })
-        commit('setLoading', false)
+        commit('setUpdateLoading', false)
       } catch (error) {
-        commit('setLoading', false)
+        commit('setUpdateLoading', false)
         commit('setError', error.message)
         throw error
       }

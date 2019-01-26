@@ -13,68 +13,78 @@
         </v-breadcrumbs>
       </v-flex>
       <v-flex xs3>
-        <v-btn small block color="primary" :loading="fileLoading" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
+        <v-btn v-if="!reportLoading" small block color="primary" :loading="fileLoading" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
       </v-flex>
     </v-layout>
-    <div v-for="list in listExemplarsWithTemplate">
-      <v-card>
-        <v-container
-          fluid
-          grid-list-lg
-        >
-          <v-flex xs12>
-            <v-textarea
-              box
-              auto-grow
-              readonly
-              v-model="'Лист №' + list.templateName + ' | ' + list.templateDescription"
-            ></v-textarea>
-          </v-flex>
-          <v-layout row wrap
-                    v-for="point in pointExemplars"
-                    :key="point.id">
-            <v-flex xs12 v-if="point.listExemplarId === list.exemplarId">
-              <v-card>
-                <v-card-title>
-                  <v-flex xs10>
-                    <b>№ {{point.name}}</b>
-                  </v-flex>
-                  <v-flex xs12>
-                    <b>Описание : </b> {{point.description}}
-                  </v-flex>
-                  <v-layout
-                    v-for="child in point.children"
-                    :key="child.id">
-                    <v-flex v-if="child.answer === 'Нет'" xs12>
-                      <v-card no wrap>
-                        <v-card-title xs12>
-                          <v-flex xs12>
-                            <b>{{child.name}})</b> {{child.description}}
-                          </v-flex>
-                          <v-flex v-if="child.act !== ''" xs12>
-                            <b>Нормативный правовой акт:</b> {{child.act}}
-                          </v-flex>
-                          <v-flex xs12>
-                            <b>Штраф:</b> {{child.fine}}
-                          </v-flex>
-                        </v-card-title>
-                      </v-card>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-flex xs12>
-                    <b>Правовой акт : </b> {{point.act}}
-                  </v-flex>
-                  <v-flex v-if="point.children.length === 0"xs12>
-                    <b>Штраф : </b> {{point.fine}}
-                  </v-flex>
-                </v-card-title>
-              </v-card>
+    <template v-if="reportLoading">
+      <div class="text-xs-center">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </div>
+    </template>
+    <template v-if="!reportLoading">
+      <div v-for="list in listExemplarsWithTemplate">
+        <v-card>
+          <v-container
+            fluid
+            grid-list-lg
+          >
+            <v-flex xs12>
+              <v-textarea
+                box
+                auto-grow
+                readonly
+                v-model="'Лист №' + list.templateName + ' | ' + list.templateDescription"
+              ></v-textarea>
             </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </div>
+            <v-layout row wrap
+                      v-for="point in pointExemplars"
+                      :key="point.id">
+              <v-flex xs12 v-if="point.listExemplarId === list.exemplarId">
+                <v-card>
+                  <v-card-title>
+                    <v-flex xs10>
+                      <b>№ {{point.name}}</b>
+                    </v-flex>
+                    <v-flex xs12>
+                      <b>Описание : </b> {{point.description}}
+                    </v-flex>
+                    <v-layout
+                      v-for="child in point.children"
+                      :key="child.id">
+                      <v-flex v-if="child.answer === 'Нет'" xs12>
+                        <v-card no wrap>
+                          <v-card-title xs12>
+                            <v-flex xs12>
+                              <b>{{child.name}})</b> {{child.description}}
+                            </v-flex>
+                            <v-flex v-if="child.act !== ''" xs12>
+                              <b>Нормативный правовой акт:</b> {{child.act}}
+                            </v-flex>
+                            <v-flex xs12>
+                              <b>Штраф:</b> {{child.fine}}
+                            </v-flex>
+                          </v-card-title>
+                        </v-card>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-flex xs12>
+                      <b>Правовой акт : </b> {{point.act}}
+                    </v-flex>
+                    <v-flex v-if="point.children.length === 0"xs12>
+                      <b>Штраф : </b> {{point.fine}}
+                    </v-flex>
+                  </v-card-title>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -99,6 +109,9 @@
       },
       fileLoading () {
         return this.$store.getters.fileLoading
+      },
+      reportLoading () {
+        return this.$store.getters.reportLoading
       }
     },
     methods: {

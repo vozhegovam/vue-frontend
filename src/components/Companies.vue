@@ -173,10 +173,10 @@
         }
       },
       getUserByValue (id) {
-        if (id === null || !this.hasAccess || !this.$store.getters.isTokenPresented) {
+        if (id === null || !this.hasAccess || !this.$store.getters.isTokenPresented || this.loading) {
           return null
         }
-        return this.$store.getters.getUsers.find(item => { return item.id === id }).name
+        return this.$store.getters.getUsers.find(item => { return item.id === id }).email
       }
     }
   }

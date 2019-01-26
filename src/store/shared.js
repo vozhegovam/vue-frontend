@@ -2,6 +2,8 @@ export default {
   state: {
     loading: false,
     fileLoading: false,
+    reportLoading: false,
+    updateLoading: false,
     error: null
   },
   mutations: {
@@ -10,6 +12,12 @@ export default {
     },
     setFileLoading (state, payload) {
       state.fileLoading = payload
+    },
+    setReportLoading (state, payload) {
+      state.reportLoading = payload
+    },
+    setUpdateLoading (state, payload) {
+      state.updateLoading = payload
     },
     setError (state, payload) {
       state.error = payload
@@ -25,6 +33,12 @@ export default {
     setFileLoading ({commit}, payload) {
       commit('setFileLoading', payload)
     },
+    setReportLoading ({commit}, payload) {
+      commit('setReportLoading', payload)
+    },
+    setUpdateLoading ({commit}, payload) {
+      commit('setUpdateLoading', payload)
+    },
     setError ({commit}, payload) {
       commit('setError', payload)
     },
@@ -37,7 +51,13 @@ export default {
       return state.loading
     },
     fileLoading (state) {
-      return state.loading
+      return state.fileLoading
+    },
+    reportLoading (state) {
+      return state.reportLoading
+    },
+    updateLoading (state) {
+      return state.updateLoading
     },
     error (state) {
       return state.error

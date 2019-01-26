@@ -52,13 +52,13 @@ export default {
     },
     async LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY_ID_FOR_REPORT ({ commit, state }, { companyId }) {
       commit('clearError')
-      commit('setLoading', true)
+      commit('setReportLoading', true)
       try {
         const response = await axios.get('/api/lists_with_template/report/' + companyId)
         commit('LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY', response.data)
-        commit('setLoading', false)
+        commit('setReportLoading', false)
       } catch (error) {
-        commit('setLoading', false)
+        commit('setReportLoading', false)
         commit('setError', error.message)
         throw error
       }
