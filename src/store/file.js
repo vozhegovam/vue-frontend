@@ -15,7 +15,7 @@ export default {
   actions: {
     async LOAD_FILE ({ commit }, {companyId, fileName}) {
       console.log('START FILE LOADER')
-      commit('clearError')
+      commit('clearMessages')
       commit('setFileLoading', true)
       try {
         const response = await axios({

@@ -72,6 +72,11 @@ export default new Router({
       component: Registration
     },
     {
+      path: '/activate/:code',
+      name: 'Activation',
+      component: Registration
+    },
+    {
       path: '/templates',
       name: 'ListTemplates',
       component: ListTemplates,

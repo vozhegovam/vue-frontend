@@ -36,7 +36,7 @@ export default {
   },
   actions: {
     async LOGIN_USER ({commit, dispatch}, {userData}) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.post('/api/login', userData)
@@ -53,12 +53,25 @@ export default {
       }
     },
     async AUTH_LOGOUT ({commit, dispatch}) {
+      commit('clearMessages')
       try {
         await axios.get('/api/logout')
         commit('AUTH_ERROR')
         commit('setLoading', false)
       } catch (error) {
         commit('AUTH_ERROR')
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
+    },
+    async AUTH_ACTIVATION ({commit, dispatch}, {code}) {
+      commit('clearMessages')
+      try {
+        await axios.get('/api/activate/' + code)
+        commit('setSuccess', 'Пользователь успешно активирован')
+        commit('setLoading', false)
+      } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)
         throw error

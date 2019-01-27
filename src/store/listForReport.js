@@ -25,7 +25,7 @@ export default {
   },
   actions: {
     async LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY ({ commit, state }, { companyId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/lists_with_template/parent_id=' + companyId)
@@ -38,7 +38,7 @@ export default {
       }
     },
     async LOAD_LIST_EXEMPLAR_WITH_TEMPLATE_BY_LIST_ID ({ commit, state }, { listId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/lists_with_template/' + listId)
@@ -51,7 +51,7 @@ export default {
       }
     },
     async LOAD_LIST_EXEMPLARS_WITH_TEMPLATE_BY_COMPANY_ID_FOR_REPORT ({ commit, state }, { companyId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setReportLoading', true)
       try {
         const response = await axios.get('/api/lists_with_template/report/' + companyId)
@@ -64,7 +64,7 @@ export default {
       }
     },
     async LOAD_REPORT ({ commit, state }, { companyId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/lists_with_template/new_report/' + companyId)

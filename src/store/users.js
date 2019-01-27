@@ -30,7 +30,7 @@ export default {
   },
   actions: {
     async LOAD_USERS ({ commit, state }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/users/')
@@ -43,7 +43,7 @@ export default {
       }
     },
     async ADD_NEW_USER ({ commit, state }, { user }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.post('/api/users/add', user)
@@ -56,7 +56,7 @@ export default {
       }
     },
     async UPDATE_USER ({ commit, state }, { user }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.put('/api/users/' + user.id, user)
@@ -69,7 +69,7 @@ export default {
       }
     },
     async REMOVE_USER ({ commit, state }, { user }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         await axios.delete('/api/users/' + user.id)

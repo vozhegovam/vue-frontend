@@ -13,17 +13,13 @@ export default {
   },
   actions: {
     async REG_REQUEST ({commit, dispatch}, { newUser }) {
-      // axios.post('/api/registration', newUser).then((response) => {
-      //   console.log(response)
-      // }).catch(err => {
-      //   console.log(err)
-      // })
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
-        const response = await axios.post('/api/registration', newUser)
+        await axios.post('/api/registration', newUser)
         commit('setLoading', false)
-        commit('AUTH_SUCCESS', response)
+        commit('setSuccess', 'На вашу почту ' + newUser.email + 'было отправленно сообщение. Пожалуйста пройдите по ссылке из письма для активации аккаунта')
+        // commit('AUTH_SUCCESS', response)
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)

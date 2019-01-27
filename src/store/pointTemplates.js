@@ -48,7 +48,7 @@ export default {
   },
   actions: {
     async LOAD_POINT_TEMPLATES ({ commit, state }, { listId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/points/' + listId)
@@ -61,7 +61,7 @@ export default {
       }
     },
     async UPDATE_POINT ({ commit, state }, { pointTemplate }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         await axios.put('/api/points/' + pointTemplate.id, pointTemplate)
@@ -74,7 +74,7 @@ export default {
       }
     },
     async REMOVE_POINT ({ commit, state }, { pointTemplate }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         await axios.delete('/api/points/' + pointTemplate.id)

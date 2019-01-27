@@ -33,7 +33,7 @@ export default {
   },
   actions: {
     LOAD_COMPANIES: function ({ commit }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       axios
         .get('/api/companies/')
@@ -57,7 +57,7 @@ export default {
         })
     },
     async ADD_NEW_COMPANY ({ commit, state }, { company }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.post('/api/companies/add', company)
@@ -70,7 +70,7 @@ export default {
       }
     },
     async UPDATE_COMPANY ({ commit, state }, { company }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.put('/api/companies/' + company.id, company)
@@ -83,7 +83,7 @@ export default {
       }
     },
     async REMOVE_COMPANY ({ commit, state }, { company }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         await axios.delete('/api/companies/' + company.id)

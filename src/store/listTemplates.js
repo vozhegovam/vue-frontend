@@ -24,7 +24,7 @@ export default {
   },
   actions: {
     async MIGRATE_LIST_TEMPLATES ({ commit }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/lists/update')
@@ -37,7 +37,7 @@ export default {
       }
     },
     async LOAD_LIST_TEMPLATES ({ commit }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/lists/')
@@ -50,7 +50,7 @@ export default {
       }
     },
     async LOAD_LIST_TEMPLATE ({ commit }, {listId}) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/lists/' + listId)
@@ -63,7 +63,7 @@ export default {
       }
     },
     async UPDATE_LIST_TEMPLATE ({ commit, state }, { listTemplate }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setUpdateLoading', true)
       try {
         const response = await axios.put('/api/lists/' + listTemplate.id, listTemplate)
@@ -76,7 +76,7 @@ export default {
       }
     },
     async REMOVE_LIST_TEMPLATE ({ commit, state }, { listTemplate }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         await axios.delete('/api/lists/' + listTemplate.id)

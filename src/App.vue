@@ -68,6 +68,30 @@
         <router-view></router-view>
       </v-content>
     </v-app>
+    <template v-if="error">
+      <v-snackbar
+        :timeout="5000"
+        :multi-line="true"
+        color="error"
+        @input="closeError"
+        :value="true"
+      >
+        {{error}}
+        <v-btn flat dark @click.native="closeError">Закрыть</v-btn>
+      </v-snackbar>
+    </template>
+    <template v-if="success">
+      <v-snackbar
+        :timeout="5000"
+        :multi-line="true"
+        color="error"
+        @input="closeSuccess"
+        :value="true"
+      >
+        {{sussess}}
+        <v-btn flat dark @click.native="closeSuccess">Закрыть</v-btn>
+      </v-snackbar>
+    </template>
   </div>
 </template>
 
@@ -97,6 +121,12 @@
       },
       getCurrentUserName () {
         return this.$store.getters.getCurrentUserName
+      },
+      error () {
+        return this.$store.getters.error
+      },
+      success () {
+        return this.$store.getters.success
       }
     },
     methods: {
@@ -104,9 +134,15 @@
         this.$store.dispatch('AUTH_LOGOUT').then(() => {
           this.$router.push('/log')
         })
-        .catch(() => {
-          this.$router.push('/log')
-        })
+          .catch(() => {
+            this.$router.push('/log')
+          })
+      },
+      closeError () {
+        this.$store.dispatch('clearMessages')
+      },
+      closeSuccess () {
+        this.$store.dispatch('clearMessages')
       }
     }
   }

@@ -29,7 +29,7 @@ export default {
   },
   actions: {
     async LOAD_LIST_EXEMPLARS_BY_TEMPLATE_AND_COMPANY ({ commit, state }, { companyId, listTemplateId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/list_ex/all/' + companyId + '/' + listTemplateId)
@@ -42,7 +42,7 @@ export default {
       }
     },
     async LOAD_LIST_EXEMPLARS_BY_COMPANY ({ commit, state }, { companyId }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.get('/api/list_ex/company_id=' + companyId)
@@ -55,7 +55,7 @@ export default {
       }
     },
     async ADD_NEW_LIST_EXEMPLAR ({ commit, state }, { listExemplar }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.post('/api/list_ex/add', listExemplar)
@@ -68,7 +68,7 @@ export default {
       }
     },
     async UPDATE_LIST_EXEMPLAR ({ commit, state }, { listExemplar }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         const response = await axios.put('/api/list_ex/' + listExemplar.id, listExemplar)
@@ -81,7 +81,7 @@ export default {
       }
     },
     async REMOVE_LIST_EXEMPLAR ({ commit, state }, { listExemplar }) {
-      commit('clearError')
+      commit('clearMessages')
       commit('setLoading', true)
       try {
         await axios.delete('/api/list_ex/' + listExemplar.id)
