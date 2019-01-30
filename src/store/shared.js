@@ -53,7 +53,7 @@ export default {
     setError ({commit}, payload) {
       commit('setError', payload)
     },
-    clearMasseges ({commit}) {
+    clearMessages ({commit}) {
       commit('clearError')
       commit('clearSuccess')
     }

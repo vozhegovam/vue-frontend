@@ -61,11 +61,12 @@ export default {
       commit('setLoading', true)
       try {
         const response = await axios.post('/api/companies/add', company)
+        commit('DECREASE_USER_BALANCE')
         commit('ADD_COMPANY', { company: response.data })
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
-        commit('setError', error.message)
+        commit('setError', error.response.data)
         throw error
       }
     },

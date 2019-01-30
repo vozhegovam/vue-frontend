@@ -8,19 +8,12 @@ import CompanyLists from '@/components/CompanyLists'
 import PointExemplars from '@/components/PointExemplars'
 import Report from '@/components/Report'
 import Login from '@/components/Auth/Login'
+import Activation from '@/components/Auth/Activation'
 import Registration from '@/components/Auth/Registration'
 import store from '../store'
 
 Vue.use(Router)
 
-const hasToken = (to, from, next) => {
-  const isToken = store.getters.isTokenPresented
-  if (isToken) {
-    next('/')
-  } else {
-    next()
-  }
-}
 const ifAuthenticated = (to, from, next) => {
   const isToken = store.getters.isTokenPresented
   if (isToken) {
@@ -63,8 +56,8 @@ export default new Router({
     {
       path: '/log',
       name: 'Login',
-      component: Login,
-      beforeEnter: hasToken
+      component: Login
+      // beforeEnter: hasToken
     },
     {
       path: '/reg',
@@ -73,8 +66,9 @@ export default new Router({
     },
     {
       path: '/activate/:code',
+      props: true,
       name: 'Activation',
-      component: Registration
+      component: Activation
     },
     {
       path: '/templates',

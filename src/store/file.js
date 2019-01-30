@@ -14,7 +14,6 @@ export default {
   },
   actions: {
     async LOAD_FILE ({ commit }, {companyId, fileName}) {
-      console.log('START FILE LOADER')
       commit('clearMessages')
       commit('setFileLoading', true)
       try {
@@ -30,7 +29,6 @@ export default {
         document.body.appendChild(link)
         link.click()
         commit('setFileLoading', false)
-        console.log('END FILE LOADER')
       } catch (error) {
         commit('setFileLoading', false)
         commit('setError', error.message)

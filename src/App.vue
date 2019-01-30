@@ -54,10 +54,12 @@
           <span class="hidden-sm-and-down">Охрана труда</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        <div v-if="isAuth">
+          <v-btn flat>{{getCurrentUserEmail}}</v-btn>
+        </div>
         <v-btn v-if="!isAuth" icon :to="'/log'">
           <v-icon>lock</v-icon>
         </v-btn>
-        <p v-if="isAuth" class="text-sm-center">{{getCurrentUserName}}</p>
         <div v-if="isAuth">
           <v-btn icon @click="logoutFrom()">
             <v-icon>lock_open</v-icon>
@@ -84,11 +86,11 @@
       <v-snackbar
         :timeout="5000"
         :multi-line="true"
-        color="error"
+        color="success"
         @input="closeSuccess"
         :value="true"
       >
-        {{sussess}}
+        {{success}}
         <v-btn flat dark @click.native="closeSuccess">Закрыть</v-btn>
       </v-snackbar>
     </template>
@@ -109,9 +111,6 @@
       ],
       right: null
     }),
-    props: {
-      source: String
-    },
     computed: {
       isAuth () {
         return this.$store.getters.isTokenPresented
@@ -119,8 +118,8 @@
       isAdmin () {
         return this.$store.getters.isUserAdmin
       },
-      getCurrentUserName () {
-        return this.$store.getters.getCurrentUserName
+      getCurrentUserEmail () {
+        return this.$store.getters.getCurrentUserEmail
       },
       error () {
         return this.$store.getters.error

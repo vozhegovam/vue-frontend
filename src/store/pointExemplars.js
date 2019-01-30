@@ -34,7 +34,7 @@ export default {
       } else {
         let idx = state.pointExemplars.map(p => p.exemplarId).indexOf(pointExemplar.exemplarId)
         if (pointExemplar.children.length !== 0) {
-          console.log(pointExemplar.children.forEach((point) => { point.answer = pointExemplar.answer }))
+          // console.log(pointExemplar.children.forEach((point) => { point.answer = pointExemplar.answer }))
         }
         state.pointExemplars.splice(idx, 1, pointExemplar)
       }

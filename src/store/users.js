@@ -9,9 +9,13 @@ Vue.use(VueAxios, axios)
 export default {
   state: {
     users: [],
+    currentUser: null,
     userList: []
   },
   mutations: {
+    LOAD_CURRENT_USER (state, users) {
+      state.users = users
+    },
     LOAD_USERS (state, users) {
       state.users = users
     },
@@ -38,6 +42,16 @@ export default {
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
+    },
+    async LOAD_CURRENT_USER ({ commit, state }) {
+      commit('clearMessages')
+      try {
+        const response = await axios.get('/api/users/current_user')
+        commit('LOAD_CURRENT_USERS', response.data)
+      } catch (error) {
         commit('setError', error.message)
         throw error
       }
@@ -87,6 +101,9 @@ export default {
   getters: {
     getUsers: state => {
       return state.users
+    },
+    getCurrentUser: state => {
+      return state.currentUser
     },
     getUsersAsList: state => {
       state.users.forEach(function (item, i, arr) {
