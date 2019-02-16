@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-layout row wrap>
-      <v-flex xs8>
+    <v-layout row wrap align-center>
+      <v-flex xs7>
         <v-breadcrumbs>
           <v-icon slot="divider">chevron_right</v-icon>
           <v-breadcrumbs-item :disabled="false" :href="'/'">
@@ -12,8 +12,44 @@
           </v-breadcrumbs-item>
         </v-breadcrumbs>
       </v-flex>
-      <v-flex xs3>
-        <v-btn v-if="!reportLoading" small block color="primary" :loading="fileLoading" dark class="mb-2" @click="redirectToFile">Выгрузить в PDF</v-btn>
+      <v-flex xs1>
+        Скачать :
+      </v-flex>
+      <!--<v-flex xs1>-->
+        <!--<v-checkbox-->
+          <!--:label="`PDF`"-->
+          <!--v-model="isExcel"-->
+        <!--&gt;</v-checkbox>-->
+      <!--</v-flex>-->
+      <!--<v-flex xs1>-->
+        <!--<v-radio-group v-model="isExcel" :mandatory="false">-->
+          <!--<v-radio label="PDF" value=false></v-radio>-->
+          <!--<v-radio label="EXCEL" value=true></v-radio>-->
+        <!--</v-radio-group>-->
+      <!--</v-flex>-->
+
+      <!--<v-flex xs1>-->
+      <!--<v-btn v-if="!reportLoading"-->
+      <!--small-->
+      <!--color="primary"-->
+      <!--:loading="fileLoading"-->
+      <!--:disabled="fileLoading"-->
+      <!--@click="redirectToPdfFile">Скачать</v-btn>-->
+      <!--</v-flex>-->
+      <v-flex xs1>
+        <v-btn v-if="!reportLoading"
+               small
+               color="primary"
+               :loading="fileLoading"
+               :disabled="fileLoading"
+               @click="redirectToPdfFile">PDF</v-btn>
+      </v-flex>
+      <v-flex xs1>
+        <v-btn v-if="!reportLoading"
+               small color="primary"
+               :loading="fileLoading"
+               :disabled="fileLoading"
+               @click="redirectToExcelFile">EXCEL</v-btn>
       </v-flex>
     </v-layout>
     <template v-if="reportLoading">
@@ -90,6 +126,10 @@
 
 <script>
   export default {
+    data: () => ({
+      isExcel: true,
+      isPdf: true
+    }),
     name: 'report',
     props: ['id'],
     created () {
@@ -115,8 +155,18 @@
       }
     },
     methods: {
+      redirectToExcelFile () {
+        this.$store.dispatch('LOAD_FILE', { companyId: this.id, fileName: this.id, format: 'xlsx' })
+      },
+      redirectToPdfFile () {
+        this.$store.dispatch('LOAD_FILE', { companyId: this.id, fileName: this.id, format: 'pdf' })
+      },
       redirectToFile () {
-        this.$store.dispatch('LOAD_FILE', { companyId: this.id, fileName: this.id + '.pdf' })
+        if (this.isExcel) {
+          this.redirectToExcelFile()
+        } else {
+          this.redirectToPdfFile()
+        }
       }
     }
   }

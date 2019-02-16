@@ -55,7 +55,9 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <div v-if="isAuth">
-          <v-btn flat>{{getCurrentUserEmail}}</v-btn>
+          <v-btn @click=""
+                 :to="'/'"
+                 flat>{{getCurrentUserEmail}}</v-btn>
         </div>
         <v-btn v-if="!isAuth" icon :to="'/log'">
           <v-icon>lock</v-icon>

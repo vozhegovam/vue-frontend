@@ -21,6 +21,10 @@ export default {
     },
     LOAD_REPORT (state, reportPath) {
       state.reportPath = reportPath
+    },
+    LIST_SCOPE_UPDATE (state, list) {
+      let idx = state.listExemplarsWithTemplate.map(p => p.exemplarId).indexOf(list.exemplarId)
+      state.listExemplarsWithTemplate.splice(idx, 1, list)
     }
   },
   actions: {
@@ -72,6 +76,20 @@ export default {
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
+    },
+    async EXCLUDE_INCLUDE_LIST ({ commit, state }, { listId }) {
+      console.log('START')
+      commit('clearMessages')
+      commit('setUpdateLoading', true)
+      try {
+        const response = await axios.put('/api/list_ex/scope_update=' + listId)
+        commit('LIST_SCOPE_UPDATE', response.data)
+        commit('setUpdateLoading', false)
+      } catch (error) {
+        commit('setUpdateLoading', false)
         commit('setError', error.message)
         throw error
       }

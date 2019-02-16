@@ -13,19 +13,19 @@ export default {
   mutations: {
   },
   actions: {
-    async LOAD_FILE ({ commit }, {companyId, fileName}) {
+    async LOAD_FILE ({ commit }, {companyId, fileName, format}) {
       commit('clearMessages')
       commit('setFileLoading', true)
       try {
         const response = await axios({
-          url: '/api/download/file/company_id=' + companyId + '&file=' + fileName,
+          url: '/api/download/file/company_id=' + companyId + '&format=' + format + '&file=' + fileName + '.' + format,
           method: 'GET',
           responseType: 'blob'
         })
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        link.setAttribute('download', fileName)
+        link.setAttribute('download', fileName + '.' + format)
         document.body.appendChild(link)
         link.click()
         commit('setFileLoading', false)
